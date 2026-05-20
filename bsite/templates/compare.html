@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Сравнение игроков{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <h3 class="text-warning mb-3"><i class="bi bi-arrow-left-right"></i> Сравнение игроков</h3>
+
+        {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+
+        <div class="card bg-black border-warning p-4 mb-4">
+            <form method="POST">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-warning">Тег игрока 1</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark text-warning border-warning">#</span>
+                            <input type="text" name="tag1" class="form-control bg-dark text-light border-warning"
+                                   placeholder="Игрок 1" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-warning">Тег игрока 2</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark text-warning border-warning">#</span>
+                            <input type="text" name="tag2" class="form-control bg-dark text-light border-warning"
+                                   placeholder="Игрок 2" required>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-warning fw-bold mt-3 w-100" type="submit">
+                    <i class="bi bi-arrow-left-right"></i> Сравнить
+                </button>
+            </form>
+        </div>
+
+        {% if result %}
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="card bg-black border-warning p-3 text-center">
+                    <h5 class="text-warning">{{ result.p1.name }}</h5>
+                    <p class="text-secondary">{{ result.p1.tag }}</p>
+                    <div class="display-4 text-warning fw-bold">{{ result.psi1.psi }}</div>
+                    <p>PSI</p>
+                    <p>🏆 {{ result.p1.trophies }} трофеев</p>
+                    <p>🎯 {{ result.p1.highestAllTimeRankedRankName or '—' }}</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card bg-black border-warning p-3 text-center">
+                    <h5 class="text-warning">{{ result.p2.name }}</h5>
+                    <p class="text-secondary">{{ result.p2.tag }}</p>
+                    <div class="display-4 text-warning fw-bold">{{ result.psi2.psi }}</div>
+                    <p>PSI</p>
+                    <p>🏆 {{ result.p2.trophies }} трофеев</p>
+                    <p>🎯 {{ result.p2.highestAllTimeRankedRankName or '—' }}</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

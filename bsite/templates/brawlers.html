@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Все бравлеры{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="text-warning"><i class="bi bi-person-badge"></i> Все бравлеры</h3>
+    <span class="text-secondary">{{ brawlers|length }} бравлеров</span>
+</div>
+
+<!-- Фильтр по тирам -->
+<div class="mb-3">
+    <div class="btn-group btn-group-sm">
+        <button class="btn btn-outline-warning active" onclick="filterTier('all')">Все</button>
+        <button class="btn btn-outline-warning" onclick="filterTier('S')">S-Tier</button>
+        <button class="btn btn-outline-warning" onclick="filterTier('A')">A-Tier</button>
+        <button class="btn btn-outline-warning" onclick="filterTier('B')">B-Tier</button>
+        <button class="btn btn-outline-warning" onclick="filterTier('C')">C-Tier</button>
+        <button class="btn btn-outline-warning" onclick="filterTier('D')">D-Tier</button>
+        <button class="btn btn-outline-warning" onclick="filterTier('F')">F-Tier</button>
+    </div>
+</div>
+
+<!-- Поиск -->
+<input type="text" class="form-control bg-dark text-light border-warning mb-3"
+       placeholder="Поиск бравлера..." oninput="searchBrawler(this.value)">
+
+<!-- Карточки бравлеров -->
+<div class="row g-3" id="brawlersGrid">
+    {% for name, data in brawlers.items() %}
+    <div class="col-6 col-md-4 col-lg-3 brawler-card" data-tier="{{ data.tier }}" data-name="{{ name|lower }}">
+        <div class="card bg-black border-warning h-100">
+            <div class="card-body text-center p-3">
+                <span class="badge bg-{{ {'S': 'danger', 'A': 'warning', 'B': 'warning', 'C': 'success', 'D': 'primary', 'F': 'secondary'}[data.tier] }} mb-2">
+                    {{ data.tier }}-Tier
+                </span>
+                <h6 class="text-warning mb-1">{{ name }}</h6>
+                <small class="text-secondary">{{ data.class }}</small>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    function filterTier(tier) {
+        document.querySelectorAll('.btn-group .btn').forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+        document.querySelectorAll('.brawler-card').forEach(card => {
+            card.style.display = (tier === 'all' || card.dataset.tier === tier) ? '' : 'none';
+        });
+    }
+    function searchBrawler(query) {
+        const q = query.toLowerCase();
+        document.querySelectorAll('.brawler-card').forEach(card => {
+            card.style.display = card.dataset.name.includes(q) ? '' : 'none';
+        });
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Поиск игрока{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6 text-center">
+        <div class="mb-4">
+            <i class="bi bi-trophy-fill text-warning" style="font-size: 5rem;" id="mainIcon"></i>
+            <h1 class="mt-2 fw-bold">Brawl Stars Stats</h1>
+            <p class="text-secondary">Player Skill Index — система оценки скилла по 7 модулям</p>
+        </div>
+
+        {% if error %}
+        <div class="alert alert-danger animate__animated animate__shakeX">{{ error }}</div>
+        {% endif %}
+
+        <div class="card bg-black border-warning p-4 mb-4">
+            <form action="/player" method="POST" id="searchForm">
+                <label class="form-label text-warning fw-bold mb-2">Введи тег игрока</label>
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text bg-dark text-warning border-warning">#</span>
+                    <input type="text" name="tag" id="tagInput" class="form-control bg-dark text-light border-warning"
+                           placeholder="2P0LYQ8J" required pattern="[A-Za-z0-9]{6,12}" autofocus>
+                    <button class="btn btn-warning fw-bold px-4" type="submit">
+                        <i class="bi bi-search"></i> Найти
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="row g-3 mb-4">
+            <div class="col-6 col-md-3">
+                <div class="card bg-black border-warning p-3 text-center h-100 feature-card">
+                    <i class="bi bi-calculator text-warning" style="font-size: 2rem;"></i>
+                    <h6 class="text-warning mt-2">PSI</h6>
+                    <small class="text-secondary">7 модулей</small>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card bg-black border-warning p-3 text-center h-100 feature-card">
+                    <i class="bi bi-globe text-warning" style="font-size: 2rem;"></i>
+                    <h6 class="text-warning mt-2">Топы</h6>
+                    <small class="text-secondary">Мир/регион</small>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card bg-black border-warning p-3 text-center h-100 feature-card">
+                    <i class="bi bi-graph-up text-warning" style="font-size: 2rem;"></i>
+                    <h6 class="text-warning mt-2">Графики</h6>
+                    <small class="text-secondary">Радар/бары</small>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card bg-black border-warning p-3 text-center h-100 feature-card">
+                    <i class="bi bi-shuffle text-warning" style="font-size: 2rem;"></i>
+                    <h6 class="text-warning mt-2">Случайный</h6>
+                    <small class="text-secondary">Повезёт?</small>
+                </div>
+            </div>
+        </div>
+
+        {% if recent %}
+        <h5 class="text-warning"><i class="bi bi-clock-history"></i> Недавние</h5>
+        <div class="row g-2">
+            {% for r in recent %}
+            <div class="col-md-6">
+                <a href="/player/{{ r.tag }}" class="text-decoration-none">
+                    <div class="card bg-black border-warning p-2 text-start">
+                        <span class="text-warning fw-bold">{{ r.name }}</span>
+                        <small class="text-secondary">{{ r.tag }} · {{ r.trophies }} 🏆</small>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Конвертер тегов{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <h3 class="text-warning mb-3"><i class="bi bi-arrow-repeat"></i> Конвертер тегов</h3>
+
+        {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+        {% if result %}
+        <div class="alert alert-success">{{ result }}</div>
+        {% endif %}
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="card bg-black border-warning p-3">
+                    <h6 class="text-warning">Тег игрока → ID</h6>
+                    <form method="POST">
+                        <input type="hidden" name="action" value="player_to_id">
+                        <input type="text" name="tag" class="form-control bg-dark text-light border-warning mb-2" placeholder="#2P0LYQ8J">
+                        <button class="btn btn-warning btn-sm w-100">Конвертировать</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card bg-black border-warning p-3">
+                    <h6 class="text-warning">ID → Тег игрока</h6>
+                    <form method="POST">
+                        <input type="hidden" name="action" value="id_to_player">
+                        <input type="number" name="hi" class="form-control bg-dark text-light border-warning mb-2" placeholder="high (0-255)">
+                        <input type="number" name="lo" class="form-control bg-dark text-light border-warning mb-2" placeholder="low">
+                        <button class="btn btn-warning btn-sm w-100">Конвертировать</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card bg-black border-warning p-3">
+                    <h6 class="text-warning">Тег команды → ID</h6>
+                    <form method="POST">
+                        <input type="hidden" name="action" value="team_to_id">
+                        <input type="text" name="tag" class="form-control bg-dark text-light border-warning mb-2" placeholder="XRHEZ4">
+                        <button class="btn btn-warning btn-sm w-100">Конвертировать</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card bg-black border-warning p-3">
+                    <h6 class="text-warning">ID → Тег команды</h6>
+                    <form method="POST">
+                        <input type="hidden" name="action" value="id_to_team">
+                        <input type="number" name="hi" class="form-control bg-dark text-light border-warning mb-2" placeholder="high">
+                        <input type="number" name="lo" class="form-control bg-dark text-light border-warning mb-2" placeholder="low">
+                        <button class="btn btn-warning btn-sm w-100">Конвертировать</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
