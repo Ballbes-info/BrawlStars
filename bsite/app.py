@@ -10,6 +10,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from lib.bs_api import BrawlStarsAPI, BrawlStarsAPIError, NotFoundError
 from lib.psi_calculator import calculate_psi
 from lib.bs_tag_converter import LongToCodeConverter
+from lib.db import add_search, update_user_psi, get_top_users
 
 load_dotenv(os.path.join(os.path.dirname(__file__), "..", ".env"))
 
@@ -71,7 +72,8 @@ def get_average_stats():
 def index():
     lang = get_lang()
     recent = session.get(RECENT_KEY, [])
-    return render_template("index.html", recent=recent, lang=lang)
+    top_psi = get_top_users(10)
+    return render_template("index.html", recent=recent, lang=lang, top_psi=top_psi)
 
 @app.route("/set-lang/<l>")
 def set_lang(l):
@@ -95,6 +97,11 @@ def player_get(tag):
         player_data = api.get_player(tag)
         psi_result = calculate_psi(player_data, api)
         add_recent(player_data)
+
+        # Сохраняем в БД
+        add_search(0, tag, player_data["name"], psi_result["psi"], player_data["trophies"])
+        update_user_psi(0, tag, psi_result["psi"], player_data["trophies"])
+
         club_info = None
         if player_data.get("club"):
             try: club_info = api.get_club(player_data["club"]["tag"])
@@ -232,7 +239,6 @@ def mini_game():
     lang = get_lang()
     api = get_api()
 
-    # Если есть сохранённая игра — показываем результат
     if session.get("mini_p1"):
         p1_tag = session.get("mini_p1")
         p2_tag = session.get("mini_p2")
@@ -246,7 +252,6 @@ def mini_game():
         except:
             player1 = player2 = None
 
-        # Очищаем сессию
         for k in ["mini_p1", "mini_p2", "mini_correct", "mini_psi1", "mini_psi2"]:
             session.pop(k, None)
 
@@ -256,7 +261,6 @@ def mini_game():
                              psi1_val=psi1_val, psi2_val=psi2_val,
                              show_result=True, lang=lang)
 
-    # Новая игра
     try:
         rankings = api.get_player_rankings("ru", limit=100)
         items = rankings.get("items", [])
@@ -271,7 +275,6 @@ def mini_game():
         psi2 = calculate_psi(player2, api)
         correct = 1 if psi1["psi"] > psi2["psi"] else 2 if psi2["psi"] > psi1["psi"] else 0
 
-        # Сохраняем в сессию
         session["mini_p1"] = player1["tag"]
         session["mini_p2"] = player2["tag"]
         session["mini_correct"] = correct
