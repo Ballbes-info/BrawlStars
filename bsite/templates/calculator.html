@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+{% block title %}{{ lang.calculator }}{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <h3 class="text-warning mb-3"><i class="bi bi-calculator"></i> {{ lang.calculator }}</h3>
+        <p class="text-secondary">{{ lang.analysis_desc }}</p>
+
+        <div class="card bg-black border-warning p-4 mb-4">
+            <form id="calcForm">
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        <label class="form-label text-warning">{{ lang.input_tag }}</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark text-warning border-warning">#</span>
+                            <input type="text" id="tagInput" class="form-control bg-dark text-light border-warning"
+                                   placeholder="2P0LYQ8J" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-warning">{{ lang.brawlers_to_p2 }}</label>
+                        <input type="number" id="p2count" class="form-control bg-dark text-light border-warning"
+                               value="5" min="1" max="20">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-warning w-100 mt-3">🧮 {{ lang.analyze }}</button>
+            </form>
+        </div>
+
+        <div id="result" style="display: none;">
+            <!-- Общий PSI -->
+            <div class="card bg-black border-warning p-4 mb-3">
+                <h4 class="text-warning" id="resultTitle"></h4>
+                <div class="row g-2 text-center mt-3">
+                    <div class="col-4">
+                        <div class="card bg-dark p-2">
+                            <small class="text-secondary">{{ lang.current_psi }}</small>
+                            <h4 class="text-warning mb-0" id="currentPsi">—</h4>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card bg-dark p-2">
+                            <small class="text-secondary">{{ lang.max_possible_psi }}</small>
+                            <h4 class="text-info mb-0">120.5</h4>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card bg-dark p-2">
+                            <small class="text-secondary">{{ lang.remaining_to_max }}</small>
+                            <h4 class="text-success mb-0" id="remaining">—</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Модули PSI -->
+            <div class="card bg-black border-warning p-4 mb-3">
+                <h5 class="text-warning">📊 {{ lang.psi_modules }}</h5>
+                <div id="modulesTable"></div>
+            </div>
+
+            <!-- Буст праймов -->
+            <div class="card bg-black border-warning p-4 mb-3">
+                <h5 class="text-warning">📈 {{ lang.praims_boost_title }}</h5>
+                <div id="p2boost"></div>
+                <div id="p3boost"></div>
+            </div>
+
+            <!-- Рекомендации -->
+            <div class="card bg-black border-warning p-4 mb-3">
+                <h5 class="text-warning">💡 {{ lang.recommendations }}</h5>
+                <div id="recommendations"></div>
+            </div>
+
+            <!-- График -->
+            <div class="card bg-black border-warning p-4 mb-3">
+                <h5 class="text-warning">📊 {{ lang.visualization }}</h5>
+                <canvas id="moduleChart" style="max-height: 300px;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+const PRESTIGE_BASE = {
+    1: {"S": 0.5, "A": 0.6, "B": 0.8, "C": 1.1, "D": 1.4, "F": 1.8},
+    2: {"S": 1.5, "A": 2.0, "B": 2.5, "C": 3.5, "D": 4.5, "F": 5.5},
+    3: {"S": 3.0, "A": 4.0, "B": 5.0, "C": 7.0, "D": 9.0, "F": 11.0},
+};
+const RANKED_POINTS = {
+    "BRONZE": 0, "SILVER": 1, "GOLD": 2, "DIAMOND": 4,
+    "MYTHIC I": 7, "MYTHIC II": 9, "MYTHIC III": 11,
+    "LEGENDARY I": 14, "LEGENDARY II": 17, "LEGENDARY III": 20,
+    "MASTER I": 24, "MASTER II": 28, "MASTER III": 32, "PRO": 37,
+};
+const MAX_MODULES = [30, 37, 20, 8, 15, 10, 0.5];
+const MODULE_NAMES = ["{{ lang.praims_short }}", "Ranked", "{{ lang.top_short }}", "{{ lang.veteran_short }}", "{{ lang.quant_short }}", "{{ lang.qual_short }}", "{{ lang.club_short }}"];
+
+let moduleChart = null;
+
+document.getElementById('calcForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const tag = document.getElementById('tagInput').value;
+    const p2count = parseInt(document.getElementById('p2count').value) || 5;
+
+    const resp = await fetch(`/api/player/${encodeURIComponent('#' + tag)}`);
+    const data = await resp.json();
+
+    if (!data.success) { alert('{{ lang.player_not_found }}'); return; }
+
+    const player = data.player;
+    const psi = data.psi;
+    const brawlers = player.brawlers || [];
+    const mod = psi.modules;
+    const psiVal = psi.psi;
+
+    const tiersResp = await fetch('/api/tiers');
+    const tiersData = await tiersResp.json();
+
+    document.getElementById('resultTitle').textContent = `{{ lang.analysis }} — ${player.name} (${player.tag})`;
+    document.getElementById('currentPsi').textContent = psiVal;
+    document.getElementById('remaining').textContent = (120.5 - psiVal).toFixed(1);
+
+    const keys = ["1_praims", "2_ranked", "3_top_world", "4_veteran", "5_quantitative", "6_qualitative", "7_club"];
+    let modulesHtml = '<div class="table-responsive"><table class="table table-dark table-sm">';
+    modulesHtml += '<thead><tr class="text-warning"><th>{{ lang.module }}</th><th>{{ lang.points }}</th><th>{{ lang.max }}</th><th>%</th></tr></thead><tbody>';
+
+    const scores = [];
+    for (const key of keys) {
+        const score = mod[key].score;
+        const maxVal = MAX_MODULES[keys.indexOf(key)];
+        const pct = maxVal > 0 ? (score / maxVal * 100) : 0;
+        scores.push(score);
+        modulesHtml += `<tr>
+            <td>${MODULE_NAMES[keys.indexOf(key)]}</td>
+            <td><b>${score}</b></td>
+            <td>${maxVal}</td>
+            <td>
+                <div class="progress" style="height:8px">
+                    <div class="progress-bar bg-warning" style="width:${pct}%"></div>
+                </div>
+                <small>${pct.toFixed(0)}%</small>
+            </td>
+        </tr>`;
+    }
+    modulesHtml += '</tbody></table></div>';
+    document.getElementById('modulesTable').innerHTML = modulesHtml;
+
+    const candidatesP2 = [];
+    for (const b of brawlers) {
+        const trophies = b.trophies || 0;
+        if (trophies < 2000) {
+            const name = b.name.toUpperCase();
+            const tier = tiersData[name]?.tier || 'B';
+            const p2score = PRESTIGE_BASE[2][tier];
+            const p1score = trophies >= 1000 ? PRESTIGE_BASE[1][tier] : 0;
+            candidatesP2.push({name: b.name, tier, trophies, boost: p2score - p1score});
+        }
+    }
+    candidatesP2.sort((a, b) => b.boost - a.boost);
+    const topP2 = candidatesP2.slice(0, p2count);
+    const boostP2 = topP2.reduce((s, b) => s + b.boost, 0);
+
+    let p2html = `<p>📈 <b>${p2count} {{ lang.brawlers_to_p2_lower }}:</b> <span class="text-success">+${boostP2.toFixed(1)} PSI</span></p>`;
+    if (topP2.length > 0) {
+        p2html += '<div class="row g-1">';
+        for (const b of topP2) {
+            p2html += `<div class="col-md-6"><small>• ${b.name} (${b.tier}-Tier, ${b.trophies}🏆) → <b class="text-success">+${b.boost.toFixed(1)}</b></small></div>`;
+        }
+        p2html += '</div>';
+    }
+    document.getElementById('p2boost').innerHTML = p2html;
+
+    const candidatesP3 = [];
+    for (const b of brawlers) {
+        const trophies = b.trophies || 0;
+        if (trophies >= 2000 && trophies < 3000) {
+            const name = b.name.toUpperCase();
+            const tier = tiersData[name]?.tier || 'B';
+            const boost = PRESTIGE_BASE[3][tier] - PRESTIGE_BASE[2][tier];
+            candidatesP3.push({name: b.name, tier, trophies, boost});
+        }
+    }
+    candidatesP3.sort((a, b) => b.boost - a.boost);
+    const topP3 = candidatesP3.slice(0, 3);
+    const boostP3 = topP3.reduce((s, b) => s + b.boost, 0);
+
+    let p3html = `<p>🔥 <b>{{ lang.brawlers_to_p3 }}:</b> <span class="text-danger">+${boostP3.toFixed(1)} PSI</span></p>`;
+    if (topP3.length > 0) {
+        p3html += '<div class="row g-1">';
+        for (const b of topP3) {
+            p3html += `<div class="col-md-6"><small>• ${b.name} (${b.tier}-Tier, ${b.trophies}🏆) → <b class="text-danger">+${b.boost.toFixed(1)}</b></small></div>`;
+        }
+        p3html += '</div>';
+    }
+    document.getElementById('p3boost').innerHTML = p3html;
+
+    let recs = '';
+    if (mod["1_praims"].score < 30) {
+        recs += `<p>• 🔴 <b>{{ lang.praims_boost }}:</b> +${(30-mod['1_praims'].score).toFixed(1)} PSI</p>`;
+    } else {
+        recs += '<p>• ✅ <b>{{ lang.praims_max }}</b></p>';
+    }
+
+    const crScore = mod["2_ranked"].score;
+    for (const [name, pts] of Object.entries(RANKED_POINTS)) {
+        if (pts > crScore) {
+            recs += `<p>• 🔴 <b>Ranked:</b> ${name} → +${(pts-crScore).toFixed(1)} PSI</p>`;
+            break;
+        }
+    }
+
+    if (mod["3_top_world"].score < 20) {
+        recs += `<p>• 🔴 <b>{{ lang.top_boost }}:</b> +${(20-mod['3_top_world'].score).toFixed(1)} PSI</p>`;
+    }
+    if (mod["5_quantitative"].score < 15) {
+        recs += `<p>• 🔴 <b>{{ lang.quant_boost }}:</b> +${(15-mod['5_quantitative'].score).toFixed(1)} PSI</p>`;
+    }
+    document.getElementById('recommendations').innerHTML = recs;
+
+    if (moduleChart) moduleChart.destroy();
+    const ctx = document.getElementById('moduleChart').getContext('2d');
+    moduleChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: MODULE_NAMES,
+            datasets: [{
+                label: '{{ lang.current_points }}',
+                data: scores,
+                backgroundColor: 'rgba(255,193,7,0.6)',
+                borderColor: '#ffc107',
+                borderWidth: 1
+            }, {
+                label: '{{ lang.max }}',
+                data: MAX_MODULES,
+                backgroundColor: 'rgba(139,148,158,0.2)',
+                borderColor: '#8b949e',
+                borderWidth: 1,
+                borderDash: [5,5]
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true, ticks: { color: '#8b949e' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                x: { ticks: { color: '#8b949e' } }
+            },
+            plugins: { legend: { labels: { color: '#8b949e' } } }
+        }
+    });
+
+    document.getElementById('result').style.display = 'block';
+    window.scrollTo({ top: document.getElementById('result').offsetTop - 100, behavior: 'smooth' });
+});
+</script>
+{% endblock %}

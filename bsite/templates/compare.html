@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Сравнение игроков{% endblock %}
+{% block title %}{{ lang.compare }}{% endblock %}
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-lg-8">
@@ -13,24 +13,24 @@
             <form method="POST">
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label class="form-label text-warning">{{ lang.get('player1', 'Игрок 1') }}</label>
+                        <label class="form-label text-warning">{{ lang.player1 }}</label>
                         <div class="input-group">
                             <span class="input-group-text bg-dark text-warning border-warning">#</span>
                             <input type="text" name="tag1" class="form-control bg-dark text-light border-warning"
-                                   placeholder="{{ lang.get('player1', 'Игрок 1') }}" required>
+                                   placeholder="{{ lang.player1 }}" required>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label text-warning">{{ lang.get('player2', 'Игрок 2') }}</label>
+                        <label class="form-label text-warning">{{ lang.player2 }}</label>
                         <div class="input-group">
                             <span class="input-group-text bg-dark text-warning border-warning">#</span>
                             <input type="text" name="tag2" class="form-control bg-dark text-light border-warning"
-                                   placeholder="{{ lang.get('player2', 'Игрок 2') }}" required>
+                                   placeholder="{{ lang.player2 }}" required>
                         </div>
                     </div>
                 </div>
                 <button class="btn btn-warning fw-bold mt-3 w-100" type="submit">
-                    <i class="bi bi-arrow-left-right"></i> Сравнить
+                    <i class="bi bi-arrow-left-right"></i> {{ lang.compare }}
                 </button>
             </form>
         </div>

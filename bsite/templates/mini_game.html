@@ -1,16 +1,15 @@
 {% extends "base.html" %}
-{% block title %}Мини-игра — Кто круче?{% endblock %}
+{% block title %}{{ lang.mini_game }}{% endblock %}
 {% block content %}
 <div class="text-center">
-    <h3 class="text-warning mb-4"><i class="bi bi-controller"></i> Кто круче?</h3>
+    <h3 class="text-warning mb-4"><i class="bi bi-controller"></i> {{ lang.who_stronger }}</h3>
 
     {% if show_result %}
-        <!-- Показываем результат -->
         <div class="alert alert-{% if correct == 0 %}warning{% else %}success{% endif %} mb-4">
             {% if correct == 0 %}
-                🤝 Ничья! Одинаковый PSI: {{ psi1_val }}
+                🤝 {{ lang.draw }} PSI: {{ psi1_val }}
             {% else %}
-                🎉 Правильно! Игрок {{ correct }} имеет PSI выше!
+                🎉 {{ lang.correct_answer }} {{ lang.player_n }} {{ correct }} PSI!
             {% endif %}
         </div>
 
@@ -21,7 +20,7 @@
                     <p class="text-secondary">{{ p1.tag }}</p>
                     <div class="display-4 text-warning fw-bold">{{ psi1_val }}</div>
                     <p>PSI</p>
-                    <p>🏆 {{ p1.trophies }} трофеев</p>
+                    <p>🏆 {{ p1.trophies }}</p>
                 </div>
             </div>
             <div class="col-md-6">
@@ -30,12 +29,12 @@
                     <p class="text-secondary">{{ p2.tag }}</p>
                     <div class="display-4 text-warning fw-bold">{{ psi2_val }}</div>
                     <p>PSI</p>
-                    <p>🏆 {{ p2.trophies }} трофеев</p>
+                    <p>🏆 {{ p2.trophies }}</p>
                 </div>
             </div>
         </div>
     {% else %}
-        <p class="text-secondary mb-4">Угадай у кого из двух случайных игроков PSI выше</p>
+        <p class="text-secondary mb-4">{{ lang.guess_psi }}</p>
 
         <div class="row g-4 justify-content-center mb-4">
             <div class="col-md-5">
@@ -44,9 +43,9 @@
                     <button type="submit" class="card bg-black border-warning p-4 w-100 game-card text-decoration-none">
                         <h4 class="text-warning">{{ p1.name }}</h4>
                         <p class="text-secondary">{{ p1.tag }}</p>
-                        <p class="text-light">🏆 {{ p1.trophies }} трофеев</p>
+                        <p class="text-light">🏆 {{ p1.trophies }}</p>
                         <p class="text-secondary">🎯 {{ p1.highestAllTimeRankedRankName or '—' }}</p>
-                        <span class="btn btn-warning btn-sm mt-2">ВЫБРАТЬ ЭТОГО</span>
+                        <span class="btn btn-warning btn-sm mt-2">{{ lang.choose_this }}</span>
                     </button>
                 </form>
             </div>
@@ -56,9 +55,9 @@
                     <button type="submit" class="card bg-black border-warning p-4 w-100 game-card text-decoration-none">
                         <h4 class="text-warning">{{ p2.name }}</h4>
                         <p class="text-secondary">{{ p2.tag }}</p>
-                        <p class="text-light">🏆 {{ p2.trophies }} трофеев</p>
+                        <p class="text-light">🏆 {{ p2.trophies }}</p>
                         <p class="text-secondary">🎯 {{ p2.highestAllTimeRankedRankName or '—' }}</p>
-                        <span class="btn btn-warning btn-sm mt-2">ВЫБРАТЬ ЭТОГО</span>
+                        <span class="btn btn-warning btn-sm mt-2">{{ lang.choose_this }}</span>
                     </button>
                 </form>
             </div>
@@ -66,19 +65,11 @@
     {% endif %}
 
     <a href="/mini-game" class="btn btn-outline-warning btn-lg">
-        <i class="bi bi-arrow-repeat"></i> {% if show_result %}Играть ещё{% else %}Новые игроки{% endif %}
+        <i class="bi bi-arrow-repeat"></i> {% if show_result %}{{ lang.play_again }}{% else %}{{ lang.new_players }}{% endif %}
     </a>
 </div>
 
 <style>
-.game-card {
-    transition: all 0.2s ease;
-    cursor: pointer;
-}
-.game-card:hover {
-    transform: scale(1.05);
-    border-color: #ffc107;
-    box-shadow: 0 0 40px rgba(255, 193, 7, 0.4);
-}
+.game-card{transition:all 0.2s ease;cursor:pointer}.game-card:hover{transform:scale(1.05);border-color:#ffc107;box-shadow:0 0 40px rgba(255,193,7,0.4)}
 </style>
 {% endblock %}

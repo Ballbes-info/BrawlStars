@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}Личный кабинет{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <h3 class="text-warning mb-3"><i class="bi bi-person-circle"></i> Личный кабинет</h3>
+
+        {% if not data %}
+        <div class="card bg-black border-warning p-4 mb-3 text-center">
+            <p class="text-secondary">
+                🔗 <b>Свяжи аккаунт Telegram</b> чтобы увидеть свои данные.
+            </p>
+            <p class="text-secondary">Открой бота @BllsBrawlbot и нажми /profile</p>
+            <a href="https://t.me/BllsBrawlbot" class="btn btn-info" target="_blank">
+                <i class="bi bi-telegram"></i> Открыть бота
+            </a>
+        </div>
+        {% else %}
+
+        <div class="card bg-black border-warning p-4 mb-3">
+            <h5 class="text-warning">👤 {{ data.user.username or 'Пользователь' }}</h5>
+            <p class="text-secondary">Выбранный тег: {{ data.user.selected_tag or 'не выбран' }}</p>
+            <p class="text-secondary">PSI: {{ data.user.psi or '—' }}</p>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="card bg-black border-warning p-3">
+                    <h5 class="text-warning"><i class="bi bi-star"></i> Избранное</h5>
+                    {% if data.favorites %}
+                        {% for f in data.favorites %}
+                        <a href="/player/{{ f.tag.replace('#', '%23') }}" class="text-decoration-none">
+                            <p class="text-light mb-1">⭐ {{ f.player_name }} ({{ f.tag }}) — PSI {{ f.psi }}</p>
+                        </a>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-secondary">Пусто</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card bg-black border-warning p-3">
+                    <h5 class="text-warning"><i class="bi bi-people"></i> Друзья</h5>
+                    {% if data.friends %}
+                        {% for f in data.friends %}
+                        <a href="/player/{{ f.tag.replace('#', '%23') }}" class="text-decoration-none">
+                            <p class="text-light mb-1">👤 {{ f.player_name }} ({{ f.tag }})</p>
+                        </a>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-secondary">Пусто</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="card bg-black border-warning p-4 mt-3">
+            <h5 class="text-warning"><i class="bi bi-clock-history"></i> История поиска</h5>
+            {% if data.history %}
+                {% for h in data.history[:10] %}
+                <a href="/player/{{ h.tag.replace('#', '%23') }}" class="text-decoration-none">
+                    <p class="text-light mb-1">🔍 {{ h.player_name or h.tag }} — PSI {{ h.psi }} ({{ h.trophies }} 🏆)</p>
+                </a>
+                {% endfor %}
+            {% else %}
+                <p class="text-secondary">Пусто</p>
+            {% endif %}
+        </div>
+
+        <div class="card bg-black border-warning p-4 mt-3">
+            <h5 class="text-warning"><i class="bi bi-activity"></i> Лента друзей</h5>
+            {% if data.activity %}
+                {% for a in data.activity %}
+                <a href="/player/{{ a.tag.replace('#', '%23') }}" class="text-decoration-none">
+                    <p class="text-light mb-1">📜 {{ a.player_name }} — {{ a.action }}</p>
+                </a>
+                {% endfor %}
+            {% else %}
+                <p class="text-secondary">Нет активности</p>
+            {% endif %}
+        </div>
+
+        <div class="card bg-black border-warning p-4 mt-3">
+            <h5 class="text-warning"><i class="bi bi-trophy"></i> Достижения</h5>
+            {% if data.badges %}
+                {% for b in data.badges %}
+                <p class="text-light mb-1">🏅 {{ b.badge_name }}</p>
+                {% endfor %}
+            {% else %}
+                <p class="text-secondary">Пока нет достижений</p>
+            {% endif %}
+        </div>
+
+        <div class="card bg-black border-warning p-4 mt-3">
+            <h5 class="text-warning"><i class="bi bi-collection"></i> Карточки</h5>
+            {% if data.cards %}
+                <div class="row g-2">
+                {% for c in data.cards[:12] %}
+                <div class="col-6 col-md-4">
+                    <a href="/player/{{ c.player_tag.replace('#', '%23') }}" class="text-decoration-none">
+                        <div class="card bg-dark p-2 text-center">
+                            <small class="text-warning">{{ c.player_name }}</small>
+                            <small class="text-secondary">PSI {{ c.psi }}</small>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-secondary">Нет карточек</p>
+            {% endif %}
+        </div>
+
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

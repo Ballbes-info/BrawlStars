@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block title %}{{ lang.badge_constructor }}{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-10 mx-auto">
+        <h3 class="text-warning mb-3"><i class="bi bi-palette"></i> {{ lang.badge_constructor }}</h3>
+        <p class="text-secondary">{{ lang.badge_desc }}</p>
+
+        <div class="row g-4">
+            <div class="col-md-5">
+                <div class="card bg-black border-warning p-4">
+                    <h5 class="text-warning mb-3">{{ lang.settings }}</h5>
+
+                    <label class="form-label text-warning">{{ lang.input_tag }}</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text bg-dark text-warning border-warning">#</span>
+                        <input type="text" id="badgeTag" class="form-control bg-dark text-light border-warning"
+                               placeholder="2P0LYQ8J" required>
+                    </div>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label text-warning">{{ lang.color }}</label>
+                            <input type="color" id="badgeColor" class="form-control" value="#ffc107">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label text-warning">{{ lang.bg_color }}</label>
+                            <input type="color" id="badgeBg" class="form-control" value="#0d1117">
+                        </div>
+                    </div>
+
+                    <label class="form-label text-warning">{{ lang.size }}</label>
+                    <select id="badgeSize" class="form-select bg-dark text-light border-warning mb-3">
+                        <option value="small">{{ lang.size_small }}</option>
+                        <option value="medium" selected>{{ lang.size_medium }}</option>
+                        <option value="large">{{ lang.size_large }}</option>
+                    </select>
+
+                    <label class="form-label text-warning">{{ lang.style }}</label>
+                    <select id="badgeStyle" class="form-select bg-dark text-light border-warning mb-3">
+                        <option value="modern" selected>{{ lang.style_modern }}</option>
+                        <option value="classic">{{ lang.style_classic }}</option>
+                        <option value="minimal">{{ lang.style_minimal }}</option>
+                    </select>
+
+                    <label class="form-label text-warning">{{ lang.custom_text }}</label>
+                    <input type="text" id="badgeText" class="form-control bg-dark text-light border-warning mb-3" value="PSI">
+
+                    <label class="form-label text-warning">{{ lang.show_on_badge }}:</label>
+                    <div class="mb-2"><input type="checkbox" id="showName" checked class="form-check-input"> <label class="text-light small">{{ lang.name }}</label></div>
+                    <div class="mb-2"><input type="checkbox" id="showTrophies" checked class="form-check-input"> <label class="text-light small">{{ lang.trophies }}</label></div>
+                    <div class="mb-2"><input type="checkbox" id="showRank" checked class="form-check-input"> <label class="text-light small">{{ lang.rank_name }}</label></div>
+                    <div class="mb-2"><input type="checkbox" id="showClub" class="form-check-input"> <label class="text-light small">{{ lang.club_name }}</label></div>
+                    <div class="mb-2"><input type="checkbox" id="showPraims" class="form-check-input"> <label class="text-light small">{{ lang.praims }}</label></div>
+                    <div class="mb-2"><input type="checkbox" id="showBrawlers" class="form-check-input"> <label class="text-light small">{{ lang.brawlers_count }}</label></div>
+                    <div class="mb-3"><input type="checkbox" id="showProgress" checked class="form-check-input"> <label class="text-light small">{{ lang.progress_bar }}</label></div>
+
+                    <button onclick="generateBadge()" class="btn btn-warning w-100 mb-2">
+                        <i class="bi bi-arrow-repeat"></i> {{ lang.generate }}
+                    </button>
+
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <button onclick="copyLink()" class="btn btn-outline-warning btn-sm w-100">
+                                <i class="bi bi-link-45deg"></i> {{ lang.copy_link }}
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <button onclick="downloadBadge()" class="btn btn-outline-warning btn-sm w-100">
+                                <i class="bi bi-download"></i> {{ lang.download_svg }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="badgeLink" class="text-secondary mt-2 small" style="word-break: break-all;"></div>
+                </div>
+            </div>
+
+            <div class="col-md-7">
+                <div class="card bg-black border-warning p-4 text-center">
+                    <h5 class="text-warning mb-3">{{ lang.preview }}</h5>
+                    <div id="badgePreview" class="d-flex justify-content-center align-items-center" style="min-height: 300px;">
+                        <p class="text-secondary">{{ lang.input_tag_hint }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+let currentBadgeUrl = '';
+
+function generateBadge() {
+    const tag = document.getElementById('badgeTag').value;
+    if (!tag) { alert('{{ lang.input_tag }}'); return; }
+
+    const params = new URLSearchParams();
+    params.set('color', document.getElementById('badgeColor').value.replace('#', ''));
+    params.set('bg', document.getElementById('badgeBg').value.replace('#', ''));
+    params.set('size', document.getElementById('badgeSize').value);
+    params.set('style', document.getElementById('badgeStyle').value);
+    params.set('text', document.getElementById('badgeText').value || 'PSI');
+    params.set('name', document.getElementById('showName').checked ? '1' : '0');
+    params.set('trophies', document.getElementById('showTrophies').checked ? '1' : '0');
+    params.set('rank', document.getElementById('showRank').checked ? '1' : '0');
+    params.set('club', document.getElementById('showClub').checked ? '1' : '0');
+    params.set('praims', document.getElementById('showPraims').checked ? '1' : '0');
+    params.set('brawlers', document.getElementById('showBrawlers').checked ? '1' : '0');
+    params.set('progress', document.getElementById('showProgress').checked ? '1' : '0');
+
+    currentBadgeUrl = `/api/badge-custom/${encodeURIComponent('#' + tag)}?${params.toString()}`;
+
+    document.getElementById('badgePreview').innerHTML = `<img src="${currentBadgeUrl}" style="max-width:100%" onerror="this.parentElement.innerHTML='<p class=\\'text-danger\\'>{{ lang.error }}</p>'">`;
+    document.getElementById('badgeLink').textContent = window.location.origin + currentBadgeUrl;
+}
+
+function copyLink() {
+    if (!currentBadgeUrl) { alert('{{ lang.generate_first }}'); return; }
+    navigator.clipboard.writeText(window.location.origin + currentBadgeUrl).then(() => alert('{{ lang.link_copied }}'));
+}
+
+function downloadBadge() {
+    if (!currentBadgeUrl) { alert('{{ lang.generate_first }}'); return; }
+    const a = document.createElement('a');
+    a.href = currentBadgeUrl;
+    a.download = 'psi-badge.svg';
+    a.click();
+}
+</script>
+{% endblock %}

@@ -1,25 +1,17 @@
 {% extends "base.html" %}
 {% block title %}{{ lang.rankings }}{% endblock %}
 {% block content %}
-<h3 class="text-warning mb-3"><i class="bi bi-trophy"></i> Топ-50 игроков</h3>
-
+<h3 class="text-warning mb-3"><i class="bi bi-trophy"></i> {{ lang.rankings }}</h3>
 <div class="row g-4">
     <div class="col-md-6">
         <h5 class="text-warning">🇷🇺 Россия</h5>
         <div class="card bg-black border-warning">
             <div class="table-responsive">
                 <table class="table table-dark table-hover mb-0">
-                    <thead>
-                        <tr class="text-warning">
-                            <th>#</th>
-                            <th>Игрок</th>
-                            <th>🏆</th>
-                            <th>Клуб</th>
-                        </tr>
-                    </thead>
+                    <thead><tr class="text-warning"><th>#</th><th>{{ lang.name }}</th><th>🏆</th><th>{{ lang.club_name }}</th></tr></thead>
                     <tbody>
                         {% for p in ru %}
-                        <tr onclick="window.location='/player/{{ p.tag }}'" style="cursor: pointer;">
+                        <tr onclick="window.location='/player/{{ p.tag.replace('#', '%23') }}'" style="cursor:pointer">
                             <td>{{ p.rank }}</td>
                             <td><span class="text-warning">{{ p.name }}</span></td>
                             <td>{{ p.trophies }}</td>
@@ -31,23 +23,15 @@
             </div>
         </div>
     </div>
-
     <div class="col-md-6">
         <h5 class="text-warning">🌍 Мир</h5>
         <div class="card bg-black border-warning">
             <div class="table-responsive">
                 <table class="table table-dark table-hover mb-0">
-                    <thead>
-                        <tr class="text-warning">
-                            <th>#</th>
-                            <th>Игрок</th>
-                            <th>🏆</th>
-                            <th>Клуб</th>
-                        </tr>
-                    </thead>
+                    <thead><tr class="text-warning"><th>#</th><th>{{ lang.name }}</th><th>🏆</th><th>{{ lang.club_name }}</th></tr></thead>
                     <tbody>
                         {% for p in global_ %}
-                        <tr onclick="window.location='/player/{{ p.tag }}'" style="cursor: pointer;">
+                        <tr onclick="window.location='/player/{{ p.tag.replace('#', '%23') }}'" style="cursor:pointer">
                             <td>{{ p.rank }}</td>
                             <td><span class="text-warning">{{ p.name }}</span></td>
                             <td>{{ p.trophies }}</td>

@@ -1,6 +1,6 @@
 from aiogram import Router
 from aiogram.filters import Command
-from aiogram.types import Message
+from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.fsm.context import FSMContext
 
 router = Router()
@@ -41,6 +41,9 @@ async def cmd_compare(message: Message, state: FSMContext):
             f"👤 <b>{p2['name']}</b> — {psi2['psi']} PSI{emoji.get(winner, '') if winner == '2' else ''}\n"
             f"🏆 {p2['trophies']} трофеев | 🎯 {p2.get('highestAllTimeRankedRankName', '—')}"
         )
-        await message.answer(text, parse_mode="HTML")
+        kb = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="🌐 Открыть на сайте", url="http://127.0.0.1:5000/compare")]
+        ])
+        await message.answer(text, reply_markup=kb, parse_mode="HTML")
     except Exception as e:
         await message.answer(f"❌ Ошибка: {e}")

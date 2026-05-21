@@ -8,19 +8,16 @@ import time
 
 DB_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "brawlstats.db")
 
-
 def get_conn():
     os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
 
-
 def init_db():
     conn = get_conn()
     c = conn.cursor()
 
-    # Пользователи
     c.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -34,7 +31,6 @@ def init_db():
         )
     """)
 
-    # История поиска
     c.execute("""
         CREATE TABLE IF NOT EXISTS search_history (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,7 +43,6 @@ def init_db():
         )
     """)
 
-    # Избранное
     c.execute("""
         CREATE TABLE IF NOT EXISTS favorites (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -60,7 +55,6 @@ def init_db():
         )
     """)
 
-    # Друзья
     c.execute("""
         CREATE TABLE IF NOT EXISTS friends (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -71,7 +65,6 @@ def init_db():
         )
     """)
 
-    # Подписки на рассылку
     c.execute("""
         CREATE TABLE IF NOT EXISTS daily_subscribers (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -82,7 +75,6 @@ def init_db():
         )
     """)
 
-    # Бейджи и достижения
     c.execute("""
         CREATE TABLE IF NOT EXISTS badges (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -92,7 +84,6 @@ def init_db():
         )
     """)
 
-    # Коллекционные карточки
     c.execute("""
         CREATE TABLE IF NOT EXISTS cards (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -104,7 +95,6 @@ def init_db():
         )
     """)
 
-    # Ежедневный бравлер
     c.execute("""
         CREATE TABLE IF NOT EXISTS daily_brawler (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -113,7 +103,6 @@ def init_db():
         )
     """)
 
-    # Лента активности
     c.execute("""
         CREATE TABLE IF NOT EXISTS activity_feed (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -126,9 +115,18 @@ def init_db():
         )
     """)
 
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS player_psi (
+            tag TEXT PRIMARY KEY,
+            player_name TEXT,
+            psi REAL,
+            trophies INTEGER,
+            updated_at REAL
+        )
+    """)
+
     conn.commit()
     conn.close()
-
 
 # ─── Пользователи ───────────────────────────────────────────────────────────
 
@@ -149,7 +147,6 @@ def get_or_create_user(telegram_id: int, username: str = ""):
     conn.close()
     return dict(row) if row else None
 
-
 def update_user_psi(telegram_id: int, tag: str, psi: float, trophies: int):
     conn = get_conn()
     c = conn.cursor()
@@ -158,7 +155,6 @@ def update_user_psi(telegram_id: int, tag: str, psi: float, trophies: int):
     conn.commit()
     conn.close()
 
-
 def get_top_users(limit: int = 10):
     conn = get_conn()
     c = conn.cursor()
@@ -166,7 +162,6 @@ def get_top_users(limit: int = 10):
     rows = [dict(r) for r in c.fetchall()]
     conn.close()
     return rows
-
 
 # ─── История поиска ─────────────────────────────────────────────────────────
 
@@ -178,7 +173,6 @@ def add_search(user_id: int, tag: str, player_name: str, psi: float, trophies: i
     conn.commit()
     conn.close()
 
-
 def get_search_history(user_id: int, limit: int = 20):
     conn = get_conn()
     c = conn.cursor()
@@ -186,7 +180,6 @@ def get_search_history(user_id: int, limit: int = 20):
     rows = [dict(r) for r in c.fetchall()]
     conn.close()
     return rows
-
 
 # ─── Избранное ──────────────────────────────────────────────────────────────
 
@@ -200,14 +193,12 @@ def add_favorite(user_id: int, tag: str, player_name: str, psi: float, trophies:
         conn.commit()
     conn.close()
 
-
 def remove_favorite(user_id: int, tag: str):
     conn = get_conn()
     c = conn.cursor()
     c.execute("DELETE FROM favorites WHERE user_id=? AND tag=?", (user_id, tag))
     conn.commit()
     conn.close()
-
 
 def get_favorites(user_id: int):
     conn = get_conn()
@@ -216,7 +207,6 @@ def get_favorites(user_id: int):
     rows = [dict(r) for r in c.fetchall()]
     conn.close()
     return rows
-
 
 # ─── Друзья ─────────────────────────────────────────────────────────────────
 
@@ -230,14 +220,12 @@ def add_friend(user_id: int, tag: str, player_name: str):
         conn.commit()
     conn.close()
 
-
 def remove_friend(user_id: int, tag: str):
     conn = get_conn()
     c = conn.cursor()
     c.execute("DELETE FROM friends WHERE user_id=? AND tag=?", (user_id, tag))
     conn.commit()
     conn.close()
-
 
 def get_friends(user_id: int):
     conn = get_conn()
@@ -247,6 +235,51 @@ def get_friends(user_id: int):
     conn.close()
     return rows
 
+# ─── Карточки ───────────────────────────────────────────────────────────────
+
+def add_card(user_id: int, player_tag: str, player_name: str, psi: float):
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute("INSERT INTO cards (user_id, player_tag, player_name, psi, collected_at) VALUES (?,?,?,?,?)",
+              (user_id, player_tag, player_name, psi, time.time()))
+    conn.commit()
+    conn.close()
+
+def get_cards(user_id: int):
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute("SELECT * FROM cards WHERE user_id=? ORDER BY collected_at DESC", (user_id,))
+    rows = [dict(r) for r in c.fetchall()]
+    conn.close()
+    return rows
+
+def get_card_count(user_id: int):
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute("SELECT COUNT(*) as count FROM cards WHERE user_id=?", (user_id,))
+    row = c.fetchone()
+    conn.close()
+    return row["count"] if row else 0
+
+# ─── Бейджи ─────────────────────────────────────────────────────────────────
+
+def add_badge(user_id: int, badge_name: str):
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute("SELECT * FROM badges WHERE user_id=? AND badge_name=?", (user_id, badge_name))
+    if not c.fetchone():
+        c.execute("INSERT INTO badges (user_id, badge_name, earned_at) VALUES (?,?,?)",
+                  (user_id, badge_name, time.time()))
+        conn.commit()
+    conn.close()
+
+def get_badges(user_id: int):
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute("SELECT * FROM badges WHERE user_id=?", (user_id,))
+    rows = [dict(r) for r in c.fetchall()]
+    conn.close()
+    return rows
 
 # ─── Активность ─────────────────────────────────────────────────────────────
 
@@ -258,11 +291,9 @@ def add_activity(user_id: int, action: str, tag: str, player_name: str, psi: flo
     conn.commit()
     conn.close()
 
-
 def get_friends_activity(user_id: int, limit: int = 10):
     conn = get_conn()
     c = conn.cursor()
-    # Получаем теги друзей
     c.execute("SELECT tag FROM friends WHERE user_id=?", (user_id,))
     friend_tags = [r["tag"] for r in c.fetchall()]
     if not friend_tags:
@@ -276,6 +307,23 @@ def get_friends_activity(user_id: int, limit: int = 10):
     conn.close()
     return rows
 
+# ─── PSI игроков ─────────────────────────────────────────────────────────────
+
+def save_player_psi(tag: str, player_name: str, psi: float, trophies: int):
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute("INSERT OR REPLACE INTO player_psi (tag, player_name, psi, trophies, updated_at) VALUES (?,?,?,?,?)",
+              (tag, player_name, psi, trophies, time.time()))
+    conn.commit()
+    conn.close()
+
+def get_top_player_psi(limit: int = 10):
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute("SELECT * FROM player_psi ORDER BY psi DESC LIMIT ?", (limit,))
+    rows = [dict(r) for r in c.fetchall()]
+    conn.close()
+    return rows
 
 # ─── Инициализация ──────────────────────────────────────────────────────────
 

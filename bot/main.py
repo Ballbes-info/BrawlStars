@@ -14,21 +14,21 @@ TOKEN = os.getenv("BOT_TOKEN")
 if not TOKEN:
     raise ValueError("BOT_TOKEN не найден в .env")
 
-# Прокси из Happ
 session = AiohttpSession(proxy="socks5://127.0.0.1:10808")
 bot = Bot(token=TOKEN, session=session)
 dp = Dispatcher(storage=MemoryStorage())
 
 async def main():
     from bot.handlers import (
-        start, select, player, psi, club, compare, help_handler,
+        start, select_handler, player, psi, club, compare, help_handler,
         brawlers, rankings, random_player, events, stats,
         inline_handler,
         card, chart, weakest, progress, top_brawlers, duel, fun,
-        favorite, friends, top, subscribe
+        favorite, friends, top, subscribe, calculator, daily,
+        collect, badges, quiz, tournament
     )
     dp.include_router(start.router)
-    dp.include_router(select.router)
+    dp.include_router(select_handler.router)
     dp.include_router(player.router)
     dp.include_router(psi.router)
     dp.include_router(club.router)
@@ -51,6 +51,12 @@ async def main():
     dp.include_router(friends.router)
     dp.include_router(top.router)
     dp.include_router(subscribe.router)
+    dp.include_router(calculator.router)
+    dp.include_router(daily.router)
+    dp.include_router(collect.router)
+    dp.include_router(badges.router)
+    dp.include_router(quiz.router)
+    dp.include_router(tournament.router)
 
     print("🤖 Бот запущен!")
     await dp.start_polling(bot)

@@ -1,6 +1,6 @@
 from aiogram import Router
 from aiogram.filters import Command
-from aiogram.types import Message
+from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.fsm.context import FSMContext
 
 router = Router()
@@ -35,6 +35,9 @@ async def cmd_club(message: Message, state: FSMContext):
         if len(members) > 15:
             text += f"\n... и ещё {len(members)-15}"
 
-        await message.answer(text, parse_mode="HTML")
+        kb = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="🌐 Открыть на сайте", url=f"http://127.0.0.1:5000/club/{club['tag'].replace('#', '%23')}")]
+        ])
+        await message.answer(text, reply_markup=kb, parse_mode="HTML")
     except Exception as e:
         await message.answer(f"❌ Ошибка: {e}")

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="{{ lang.get('code', 'ru') }}" data-bs-theme="dark">
+<html lang="ru" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brawl Stats — {% block title %}PSI Калькулятор{% endblock %}</title>
+    <title>Brawl Stats — {% block title %}PSI{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -25,11 +25,15 @@
                 <div class="navbar-nav ms-auto">
                     <a class="nav-link" href="/"><i class="bi bi-search"></i> {{ lang.search }}</a>
                     <a class="nav-link" href="/compare"><i class="bi bi-arrow-left-right"></i> {{ lang.compare }}</a>
+                    <a class="nav-link" href="/calculator"><i class="bi bi-calculator"></i> {{ lang.calculator }}</a>
                     <a class="nav-link" href="/rankings"><i class="bi bi-trophy"></i> {{ lang.rankings }}</a>
                     <a class="nav-link" href="/brawlers"><i class="bi bi-person-badge"></i> {{ lang.brawlers }}</a>
                     <a class="nav-link" href="/tag-converter"><i class="bi bi-arrow-repeat"></i> {{ lang.converter }}</a>
+                    <a class="nav-link" href="/top-brawlers"><i class="bi bi-bar-chart"></i> {{ lang.top_brawlers }}</a>
+                    <a class="nav-link" href="/badge-constructor"><i class="bi bi-palette"></i> {{ lang.badge }}</a>
+                    <a class="nav-link" href="/profile"><i class="bi bi-person-circle"></i> {{ lang.profile }}</a>
                     <a class="nav-link" href="/random"><i class="bi bi-shuffle"></i> {{ lang.random }}</a>
-                    <a class="nav-link" href="/mini-game"><i class="bi bi-controller"></i> Мини-игра</a>
+                    <a class="nav-link" href="/mini-game"><i class="bi bi-controller"></i> {{ lang.mini_game }}</a>
                     <a class="nav-link" href="/set-lang/ru">🇷🇺</a>
                     <a class="nav-link" href="/set-lang/en">🇬🇧</a>
                     <a class="nav-link" href="#" onclick="toggleTheme()"><i class="bi bi-sun-fill" id="themeIcon"></i></a>
@@ -49,34 +53,9 @@
     {% block extra_scripts %}{% endblock %}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function toggleTheme() {
-            const html = document.documentElement;
-            const icon = document.getElementById('themeIcon');
-            if (html.getAttribute('data-bs-theme') === 'dark') {
-                html.setAttribute('data-bs-theme', 'light');
-                icon.className = 'bi bi-moon-fill';
-            } else {
-                html.setAttribute('data-bs-theme', 'dark');
-                icon.className = 'bi bi-sun-fill';
-            }
-        }
-
-        function exportToPNG(elementId) {
-            const el = document.getElementById(elementId);
-            html2canvas(el, { scale: 2, backgroundColor: '#0d1117' }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'brawl-stats.png';
-                link.href = canvas.toDataURL();
-                link.click();
-            });
-        }
-
-        function shareProfile(tag) {
-            const url = window.location.origin + '/player/' + tag;
-            navigator.clipboard.writeText(url).then(() => {
-                alert('Ссылка скопирована: ' + url);
-            });
-        }
+        function toggleTheme(){const h=document.documentElement,d=document.getElementById('themeIcon');if(h.getAttribute('data-bs-theme')==='dark'){h.setAttribute('data-bs-theme','light');d.className='bi bi-moon-fill'}else{h.setAttribute('data-bs-theme','dark');d.className='bi bi-sun-fill'}}
+        function exportToPNG(id){html2canvas(document.getElementById(id),{scale:2,backgroundColor:'#0d1117'}).then(c=>{const a=document.createElement('a');a.download='brawl-stats.png';a.href=c.toDataURL();a.click()})}
+        function shareProfile(tag){navigator.clipboard.writeText(window.location.origin+'/player/'+tag).then(()=>alert('Ссылка скопирована!'))}
     </script>
 </body>
 </html>

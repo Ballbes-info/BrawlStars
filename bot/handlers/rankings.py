@@ -1,10 +1,9 @@
 from aiogram import Router
 from aiogram.filters import Command
-from aiogram.types import Message
+from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 
 router = Router()
 from bot.utils.api import get_rankings
-
 
 @router.message(Command("rankings"))
 async def cmd_rankings(message: Message):
@@ -22,6 +21,9 @@ async def cmd_rankings(message: Message):
         for p in gl:
             text += f"{p['rank']}. {p['name']} — {p['trophies']} 🏆\n"
 
-        await message.answer(text, parse_mode="HTML")
+        kb = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="🌐 Открыть на сайте", url="http://127.0.0.1:5000/rankings")]
+        ])
+        await message.answer(text, reply_markup=kb, parse_mode="HTML")
     except Exception as e:
         await message.answer(f"❌ Ошибка: {e}")

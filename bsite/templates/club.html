@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Клуб {{ club.name }}{% endblock %}
+{% block title %}{{ lang.club_name }} {{ club.name }}{% endblock %}
 {% block content %}
 <div class="row">
     <div class="col-lg-4">
@@ -8,16 +8,16 @@
             <p class="text-secondary">{{ club.tag }}</p>
             <p class="text-light">{{ club.description or '—' }}</p>
             <hr class="text-warning">
-            <p><i class="bi bi-trophy text-warning"></i> Трофеи: <strong>{{ club.trophies }}</strong></p>
-            <p><i class="bi bi-people text-warning"></i> Участников: <strong>{{ club.memberCount or members|length }}</strong></p>
-            <p><i class="bi bi-flag text-warning"></i> Требования: <strong>{{ club.requiredTrophies }} трофеев</strong></p>
+            <p><i class="bi bi-trophy text-warning"></i> {{ lang.trophies }}: <strong>{{ club.trophies }}</strong></p>
+            <p><i class="bi bi-people text-warning"></i> {{ lang.members_count }}: <strong>{{ club.memberCount or members|length }}</strong></p>
+            <p><i class="bi bi-flag text-warning"></i> {{ lang.requirements }}: <strong>{{ club.requiredTrophies }} {{ lang.trophies_lower }}</strong></p>
         </div>
     </div>
     <div class="col-lg-8">
-        <h4 class="text-warning"><i class="bi bi-people-fill"></i> Участники ({{ members|length }})</h4>
+        <h4 class="text-warning"><i class="bi bi-people-fill"></i> {{ lang.members }} ({{ members|length }})</h4>
         <div class="table-responsive">
             <table class="table table-dark table-hover">
-                <thead><tr class="text-warning"><th>Игрок</th><th>Роль</th><th>🏆</th><th>PSI</th></tr></thead>
+                <thead><tr class="text-warning"><th>{{ lang.name }}</th><th>{{ lang.role }}</th><th>🏆</th><th>PSI</th></tr></thead>
                 <tbody>
                     {% for m in members %}
                     <tr>
@@ -29,9 +29,7 @@
                             {{ m.role }}
                         </td>
                         <td>{{ m.trophies }}</td>
-                        <td>
-                            <a href="/player/{{ m.tag.replace('#', '%23') }}" class="btn btn-outline-warning btn-sm">Рассчитать PSI</a>
-                        </td>
+                        <td><a href="/player/{{ m.tag.replace('#', '%23') }}" class="btn btn-outline-warning btn-sm">{{ lang.calculate_psi }}</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>

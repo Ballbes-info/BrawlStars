@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}{{ lang.top_brawlers }}{% endblock %}
+{% block content %}
+<h3 class="text-warning mb-3"><i class="bi bi-bar-chart"></i> {{ lang.popular_brawlers }}</h3>
+<p class="text-secondary">{{ lang.most_used }}</p>
+
+<div class="card bg-black border-warning p-4">
+    {% if brawlers %}
+    <div class="table-responsive">
+        <table class="table table-dark table-hover">
+            <thead><tr class="text-warning"><th>#</th><th>{{ lang.name }}</th><th>{{ lang.usage }}</th></tr></thead>
+            <tbody>
+                {% for name, count in brawlers %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ name }}</td>
+                    <td>{{ count }} {{ lang.of_top }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="text-secondary text-center py-4">{{ lang.no_data }}</p>
+    {% endif %}
+</div>
+{% endblock %}

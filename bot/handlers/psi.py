@@ -2,10 +2,11 @@ from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.fsm.context import FSMContext
+import time
 
 router = Router()
-from bot.utils.api import get_psi
-from lib.db import get_or_create_user, update_user_psi, add_search, add_activity
+from bot.utils.api import get_psi, get_player
+from lib.db import get_or_create_user, add_search, add_activity, save_player_psi
 
 saved_tags = {}
 
@@ -47,15 +48,22 @@ async def send_psi(message, tag):
             f"7️⃣ Клуб: {mod['7_club']['score']}/0.5"
         )
 
-        # Сохраняем в БД
+        # Сохраняем PSI игрока
+        try:
+            player = get_player(tag)
+            save_player_psi(tag, player["name"], result["psi"], player["trophies"])
+        except:
+            save_player_psi(tag, "", result["psi"], 0)
+
+        # Сохраняем в историю пользователя
         user = get_or_create_user(message.chat.id, message.from_user.username or "")
-        update_user_psi(user["telegram_id"], tag, result["psi"], 0)
         add_search(user["id"], tag, "", result["psi"], 0)
         add_activity(user["id"], "check_psi", tag, "", result["psi"])
 
         kb = InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="🔄 Обновить", callback_data=f"psi_{tag}")],
-            [InlineKeyboardButton(text="🌐 Открыть на сайте", url=f"http://127.0.0.1:5000/player/{tag.replace('#', '%23')}")]
+            [InlineKeyboardButton(text="🌐 Открыть на сайте", url=f"http://127.0.0.1:5000/player/{tag.replace('#', '%23')}")],
+            [InlineKeyboardButton(text="🏅 PSI-бейдж", url=f"http://127.0.0.1:5000/badge/{tag.replace('#', '%23')}")]
         ])
 
         user_id = message.chat.id

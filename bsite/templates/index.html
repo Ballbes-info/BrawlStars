@@ -6,7 +6,7 @@
         <div class="mb-4">
             <i class="bi bi-trophy-fill text-warning" style="font-size: 5rem;" id="mainIcon"></i>
             <h1 class="mt-2 fw-bold">Brawl Stars Stats</h1>
-            <p class="text-secondary">{{ lang.psi }} — система оценки скилла по 7 модулям</p>
+            <p class="text-secondary">{{ lang.psi_desc }}</p>
         </div>
 
         {% if error %}
@@ -31,39 +31,55 @@
             <div class="col-6 col-md-3">
                 <div class="card bg-black border-warning p-3 text-center h-100 feature-card">
                     <i class="bi bi-calculator text-warning" style="font-size: 2rem;"></i>
-                    <h6 class="text-warning mt-2">PSI</h6>
-                    <small class="text-secondary">7 модулей</small>
+                    <h6 class="text-warning mt-2">{{ lang.psi }}</h6>
+                    <small class="text-secondary">{{ lang.psi_modules }}</small>
                 </div>
             </div>
             <div class="col-6 col-md-3">
                 <div class="card bg-black border-warning p-3 text-center h-100 feature-card">
                     <i class="bi bi-globe text-warning" style="font-size: 2rem;"></i>
-                    <h6 class="text-warning mt-2">Топы</h6>
+                    <h6 class="text-warning mt-2">{{ lang.rankings }}</h6>
                     <small class="text-secondary">Мир/регион</small>
                 </div>
             </div>
             <div class="col-6 col-md-3">
                 <div class="card bg-black border-warning p-3 text-center h-100 feature-card">
                     <i class="bi bi-graph-up text-warning" style="font-size: 2rem;"></i>
-                    <h6 class="text-warning mt-2">Графики</h6>
+                    <h6 class="text-warning mt-2">{{ lang.psi_radar }}</h6>
                     <small class="text-secondary">Радар/бары</small>
                 </div>
             </div>
             <div class="col-6 col-md-3">
                 <div class="card bg-black border-warning p-3 text-center h-100 feature-card">
                     <i class="bi bi-controller text-warning" style="font-size: 2rem;"></i>
-                    <h6 class="text-warning mt-2">Мини-игра</h6>
-                    <small class="text-secondary">Угадай PSI</small>
+                    <h6 class="text-warning mt-2">{{ lang.mini_game }}</h6>
+                    <small class="text-secondary">{{ lang.guess_psi }}</small>
                 </div>
             </div>
         </div>
 
+        {% if top_psi %}
+        <h5 class="text-warning mt-4"><i class="bi bi-trophy"></i> {{ lang.top10psi }}</h5>
+        <div class="row g-2 mb-3">
+            {% for u in top_psi %}
+            <div class="col-md-6">
+                <a href="/player/{{ u.tag.replace('#', '%23') }}" class="text-decoration-none">
+                    <div class="card bg-black border-warning p-2 text-start">
+                        <span class="text-warning fw-bold">{{ u.player_name or u.tag }}</span>
+                        <small class="text-secondary">{{ u.tag }} · PSI {{ u.psi }}</small>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
         {% if recent %}
-        <h5 class="text-warning"><i class="bi bi-clock-history"></i> Недавние</h5>
+        <h5 class="text-warning"><i class="bi bi-clock-history"></i> {{ lang.recent }}</h5>
         <div class="row g-2">
             {% for r in recent %}
             <div class="col-md-6">
-                <a href="/player/{{ r.tag }}" class="text-decoration-none">
+                <a href="/player/{{ r.tag.replace('#', '%23') }}" class="text-decoration-none">
                     <div class="card bg-black border-warning p-2 text-start">
                         <span class="text-warning fw-bold">{{ r.name }}</span>
                         <small class="text-secondary">{{ r.tag }} · {{ r.trophies }} 🏆</small>
