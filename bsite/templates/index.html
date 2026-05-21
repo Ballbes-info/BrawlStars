@@ -1,27 +1,27 @@
 {% extends "base.html" %}
-{% block title %}Поиск игрока{% endblock %}
+{% block title %}{{ lang.search }}{% endblock %}
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-lg-6 text-center">
         <div class="mb-4">
             <i class="bi bi-trophy-fill text-warning" style="font-size: 5rem;" id="mainIcon"></i>
             <h1 class="mt-2 fw-bold">Brawl Stars Stats</h1>
-            <p class="text-secondary">Player Skill Index — система оценки скилла по 7 модулям</p>
+            <p class="text-secondary">{{ lang.psi }} — система оценки скилла по 7 модулям</p>
         </div>
 
         {% if error %}
-        <div class="alert alert-danger animate__animated animate__shakeX">{{ error }}</div>
+        <div class="alert alert-danger">{{ error }}</div>
         {% endif %}
 
         <div class="card bg-black border-warning p-4 mb-4">
-            <form action="/player" method="POST" id="searchForm">
-                <label class="form-label text-warning fw-bold mb-2">Введи тег игрока</label>
+            <form action="/player" method="POST">
+                <label class="form-label text-warning fw-bold mb-2">{{ lang.input_tag }}</label>
                 <div class="input-group input-group-lg">
                     <span class="input-group-text bg-dark text-warning border-warning">#</span>
-                    <input type="text" name="tag" id="tagInput" class="form-control bg-dark text-light border-warning"
-                           placeholder="2P0LYQ8J" required pattern="[A-Za-z0-9]{6,12}" autofocus>
+                    <input type="text" name="tag" class="form-control bg-dark text-light border-warning"
+                           placeholder="2P0LYQ8J" required autofocus>
                     <button class="btn btn-warning fw-bold px-4" type="submit">
-                        <i class="bi bi-search"></i> Найти
+                        <i class="bi bi-search"></i> {{ lang.find }}
                     </button>
                 </div>
             </form>
@@ -51,9 +51,9 @@
             </div>
             <div class="col-6 col-md-3">
                 <div class="card bg-black border-warning p-3 text-center h-100 feature-card">
-                    <i class="bi bi-shuffle text-warning" style="font-size: 2rem;"></i>
-                    <h6 class="text-warning mt-2">Случайный</h6>
-                    <small class="text-secondary">Повезёт?</small>
+                    <i class="bi bi-controller text-warning" style="font-size: 2rem;"></i>
+                    <h6 class="text-warning mt-2">Мини-игра</h6>
+                    <small class="text-secondary">Угадай PSI</small>
                 </div>
             </div>
         </div>

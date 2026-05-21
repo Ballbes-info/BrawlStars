@@ -3,259 +3,334 @@
 {% block content %}
 
 <div id="profile-content">
-<div class="row mb-4">
-    <!-- ЛЕВАЯ КОЛОНКА -->
-    <div class="col-lg-4 text-center">
-        <div class="card bg-black border-warning p-4 sticky-top" style="top: 80px; z-index: 10;">
-            <h2 class="text-warning mb-0">{{ player.name }}</h2>
-            <p class="text-secondary mb-3">{{ player.tag }}</p>
+    <div class="row mb-4">
+        <!-- ЛЕВАЯ КОЛОНКА -->
+        <div class="col-lg-4 text-center">
+            <div class="card bg-black border-warning p-4 sticky-top" style="top: 80px; z-index: 10;">
+                <h2 class="text-warning mb-0">{{ player.name }}</h2>
+                <p class="text-secondary mb-3">{{ player.tag }}</p>
 
-            <div class="display-1 fw-bold text-warning psi-glow" id="psiValue">{{ psi.psi }}</div>
-            <p class="text-secondary mb-3">Player Skill Index</p>
+                <div class="display-1 fw-bold text-warning psi-glow" id="psiValue">{{ psi.psi }}</div>
+                <p class="text-secondary mb-3">Player Skill Index</p>
 
-            {% set level = '👑 GODLIKE' if psi.psi >= 100 else '🔥 PRO' if psi.psi >= 80 else '💎 SEMI-PRO' if psi.psi >= 60 else '🎯 EXPERIENCED' if psi.psi >= 40 else '📈 INTERMEDIATE' if psi.psi >= 20 else '🌱 BEGINNER' %}
-            <span class="badge bg-warning text-dark fs-5 px-3 py-2" id="psiLevel">{{ level }}</span>
+                {% set level = '👑 GODLIKE' if psi.psi >= 100 else '🔥 PRO' if psi.psi >= 80 else '💎 SEMI-PRO' if psi.psi
+                >= 60 else '🎯 EXPERIENCED' if psi.psi >= 40 else '📈 INTERMEDIATE' if psi.psi >= 20 else '🌱 BEGINNER' %}
+                <span class="badge bg-warning text-dark fs-5 px-3 py-2" id="psiLevel">{{ level }}</span>
 
-            <hr class="text-warning">
+                <hr class="text-warning">
 
-            <div class="text-start small">
-                <p><i class="bi bi-trophy text-warning"></i> Трофеи: <strong>{{ player.trophies }}</strong></p>
-                <p><i class="bi bi-graph-up text-warning"></i> Макс трофеи: <strong>{{ player.highestTrophies }}</strong></p>
-                <p><i class="bi bi-star text-warning"></i> Уровень: <strong>{{ player.expLevel }}</strong> ({{ player.expPoints }} XP)</p>
-                <p><i class="bi bi-palette text-warning"></i> Цвет имени: <code>{{ player.nameColor }}</code></p>
-                <p><i class="bi bi-shield text-warning"></i> Текущий ранг: <strong>{{ player.rankedRankName or '—' }}</strong> (ELO: {{ player.rankedElo }})</p>
-                <p><i class="bi bi-award text-warning"></i> Лучший ранг: <strong>{{ player.highestAllTimeRankedRankName or '—' }}</strong> (ELO: {{ player.highestAllTimeRankedElo }})</p>
-                <p><i class="bi bi-flag text-warning"></i> Лучший за сезон: <strong>{{ player.highestSeasonRankedRankName or '—' }}</strong></p>
-                <p><i class="bi bi-check-circle text-warning"></i> Квалификация: <strong>{{ 'Да' if player.isQualifiedFromChampionshipChallenge else 'Нет' }}</strong></p>
-                <p><i class="bi bi-controller text-warning"></i> Побед 3v3: <strong>{{ player['3vs3Victories'] }}</strong></p>
-                <p><i class="bi bi-person text-warning"></i> Побед соло: <strong>{{ player.soloVictories }}</strong></p>
-                <p><i class="bi bi-people text-warning"></i> Побед дуо: <strong>{{ player.duoVictories }}</strong></p>
-                <p><i class="bi bi-clock text-warning"></i> Robo Rumble: <strong>{{ player.bestRoboRumbleTime }} сек</strong></p>
-                <p><i class="bi bi-clock-history text-warning"></i> Big Brawler: <strong>{{ player.bestTimeAsBigBrawler }} сек</strong></p>
-                <p><i class="bi bi-star-half text-warning"></i> Престиж: <strong>{{ player.totalPrestigeLevel }}</strong></p>
-                {% if player.club %}
-                <p><i class="bi bi-people-fill text-warning"></i> Клуб: <strong>{{ player.club.name }}</strong> ({{ player.club.tag }})</p>
-                {% endif %}
+                <div class="text-start small">
+                    <p><i class="bi bi-trophy text-warning"></i> Трофеи: <strong>{{ player.trophies }}</strong></p>
+                    <p><i class="bi bi-graph-up text-warning"></i> Макс трофеи: <strong>{{ player.highestTrophies
+                        }}</strong></p>
+                    <p><i class="bi bi-star text-warning"></i> Уровень: <strong>{{ player.expLevel }}</strong> ({{
+                        player.expPoints }} XP)</p>
+                    <p><i class="bi bi-palette text-warning"></i> Цвет имени: <code>{{ player.nameColor }}</code></p>
+                    <p><i class="bi bi-shield text-warning"></i> Текущий ранг: <strong>{{ player.rankedRankName or '—'
+                        }}</strong> (ELO: {{ player.rankedElo }})</p>
+                    <p><i class="bi bi-award text-warning"></i> Лучший ранг: <strong>{{
+                        player.highestAllTimeRankedRankName or '—' }}</strong> (ELO: {{ player.highestAllTimeRankedElo
+                        }})</p>
+                    <p><i class="bi bi-flag text-warning"></i> Лучший за сезон: <strong>{{
+                        player.highestSeasonRankedRankName or '—' }}</strong></p>
+                    <p><i class="bi bi-check-circle text-warning"></i> Квалификация: <strong>{{ 'Да' if
+                        player.isQualifiedFromChampionshipChallenge else 'Нет' }}</strong></p>
+                    <p><i class="bi bi-controller text-warning"></i> Побед 3v3: <strong>{{ player['3vs3Victories']
+                        }}</strong></p>
+                    <p><i class="bi bi-person text-warning"></i> Побед соло: <strong>{{ player.soloVictories }}</strong>
+                    </p>
+                    <p><i class="bi bi-people text-warning"></i> Побед дуо: <strong>{{ player.duoVictories }}</strong>
+                    </p>
+                    <p><i class="bi bi-clock text-warning"></i> Robo Rumble: <strong>{{ player.bestRoboRumbleTime }}
+                        сек</strong></p>
+                    <p><i class="bi bi-clock-history text-warning"></i> Big Brawler: <strong>{{
+                        player.bestTimeAsBigBrawler }} сек</strong></p>
+                    <p><i class="bi bi-star-half text-warning"></i> Престиж: <strong>{{ player.totalPrestigeLevel
+                        }}</strong></p>
+                    {% if player.club and player.club.tag %}
+                    <p><i class="bi bi-people-fill text-warning"></i> Клуб:
+                        <a href="/club/{{ player.club.tag.replace('#', '%23') }}" class="text-warning"><strong>{{
+                            player.club.name }}</strong></a>
+                        ({{ player.club.tag }})
+                    </p>
+                    {% endif %}
+                </div>
+
+                <hr class="text-warning">
+
+                <!-- Прогресс до следующего уровня -->
+                {% set next_trophies = [50000, 70000, 100000] %}
+                {% set next_level = [300, 500, 700] %}
+                {% set trophy_target = namespace(val=50000) %}
+                {% for t in next_trophies %}{% if player.trophies >= t %}{% set trophy_target.val = t + 20000 %}{% endif
+                %}{% endfor %}
+                {% set level_target = namespace(val=300) %}
+                {% for l in next_level %}{% if player.expLevel >= l %}{% set level_target.val = l + 200 %}{% endif %}{%
+                endfor %}
+
+                <div class="text-start small">
+                    <p><i class="bi bi-arrow-up text-success"></i> До {{ trophy_target.val }} трофеев:
+                        <strong>{{ trophy_target.val - player.trophies }} осталось</strong></p>
+                    <div class="progress mb-2" style="height:6px">
+                        <div class="progress-bar bg-success"
+                             style="width: {{ (player.trophies / trophy_target.val * 100)|int }}%"></div>
+                    </div>
+                    <p><i class="bi bi-arrow-up text-info"></i> До {{ level_target.val }} уровня:
+                        <strong>{{ level_target.val - player.expLevel }} осталось</strong></p>
+                    <div class="progress mb-2" style="height:6px">
+                        <div class="progress-bar bg-info"
+                             style="width: {{ (player.expLevel / level_target.val * 100)|int }}%"></div>
+                    </div>
+                </div>
+
+                <hr class="text-warning">
+
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-warning btn-sm" onclick="exportToPNG('profile-content')">
+                        <i class="bi bi-download"></i> Экспорт PNG
+                    </button>
+                    <button class="btn btn-outline-warning btn-sm" onclick="shareProfile('{{ player.tag }}')">
+                        <i class="bi bi-share"></i> Поделиться
+                    </button>
+                </div>
+
+                <a href="/" class="btn btn-warning w-100 mt-2"><i class="bi bi-search"></i> Искать другого</a>
             </div>
-
-            <hr class="text-warning">
-
-            <div class="d-grid gap-2">
-                <button class="btn btn-outline-warning btn-sm" onclick="exportToPNG('profile-content')">
-                    <i class="bi bi-download"></i> Экспорт PNG
-                </button>
-                <button class="btn btn-outline-warning btn-sm" onclick="shareProfile('{{ player.tag }}')">
-                    <i class="bi bi-share"></i> Поделиться
-                </button>
-            </div>
-
-            <a href="/" class="btn btn-warning w-100 mt-2"><i class="bi bi-search"></i> Искать другого</a>
-        </div>
-    </div>
-
-    <!-- ПРАВАЯ КОЛОНКА -->
-    <div class="col-lg-8">
-        <h4 class="text-warning"><i class="bi bi-pentagon"></i> Радар PSI</h4>
-        <div class="card bg-black border-warning p-3 mb-4">
-            <canvas id="radarChart" style="max-height: 350px;"></canvas>
         </div>
 
-        <div class="row g-3 mb-4">
-            <div class="col-md-6">
-                <h6 class="text-warning"><i class="bi bi-pie-chart"></i> Бравлеры по тирам</h6>
-                <div class="card bg-black border-warning p-3">
-                    <canvas id="tierChart" style="max-height: 250px;"></canvas>
+        <!-- ПРАВАЯ КОЛОНКА -->
+        <div class="col-lg-8">
+            <!-- Советы -->
+            {% if tips %}
+            <h4 class="text-success"><i class="bi bi-lightbulb"></i> Точки роста</h4>
+            {% for module, tip in tips %}
+            <div class="card bg-black border-success mb-2">
+                <div class="card-body py-2">
+                    <strong class="text-success">{{ module }}:</strong> <span class="text-light small">{{ tip }}</span>
                 </div>
             </div>
-            <div class="col-md-6">
-                <h6 class="text-warning"><i class="bi bi-bar-chart"></i> Топ-10 бравлеров</h6>
-                <div class="card bg-black border-warning p-3">
-                    <canvas id="topBrawlersChart" style="max-height: 250px;"></canvas>
+            {% endfor %}
+            {% endif %}
+
+            <!-- Сравнение со средним -->
+            <h4 class="text-warning mt-3"><i class="bi bi-people"></i> Сравнение со средним игроком</h4>
+            <div class="row g-2 mb-4">
+                <div class="col-6 col-md-3">
+                    <div class="card bg-black border-warning p-2 text-center"><small
+                            class="text-secondary">Трофеи</small><h6 class="text-warning mb-0">{{ player.trophies
+                        }}</h6><small class="text-secondary">ср. {{ avg.avg_trophies }}</small></div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="card bg-black border-warning p-2 text-center"><small
+                            class="text-secondary">Уровень</small><h6 class="text-warning mb-0">{{ player.expLevel
+                        }}</h6><small class="text-secondary">ср. {{ avg.avg_exp }}</small></div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="card bg-black border-warning p-2 text-center"><small class="text-secondary">Побед
+                        3v3</small><h6 class="text-warning mb-0">{{ player['3vs3Victories'] }}</h6><small
+                            class="text-secondary">ср. {{ avg.avg_3v3 }}</small></div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="card bg-black border-warning p-2 text-center"><small
+                            class="text-secondary">Бравлеров</small><h6 class="text-warning mb-0">{{
+                        player.brawlers|length }}</h6><small class="text-secondary">ср. {{ avg.avg_brawlers }}</small>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Сводка -->
-        {% set total_brawlers = player.brawlers|length %}
-        {% set p1 = player.brawlers|selectattr('trophies', 'ge', 1000)|list|length %}
-        {% set p2 = player.brawlers|selectattr('trophies', 'ge', 2000)|list|length %}
-        {% set p3 = player.brawlers|selectattr('trophies', 'ge', 3000)|list|length %}
-        <h5 class="text-warning"><i class="bi bi-info-circle"></i> Сводка</h5>
-        <div class="row g-2 mb-4">
-            <div class="col-6 col-md-3"><div class="card bg-black border-warning p-2 text-center"><small class="text-secondary">Бравлеров</small><h5 class="text-warning mb-0">{{ total_brawlers }}</h5></div></div>
-            <div class="col-6 col-md-3"><div class="card bg-black border-warning p-2 text-center"><small class="text-secondary">P1 (1000+)</small><h5 class="text-warning mb-0">{{ p1 }}</h5></div></div>
-            <div class="col-6 col-md-3"><div class="card bg-black border-warning p-2 text-center"><small class="text-secondary">P2 (2000+)</small><h5 class="text-warning mb-0">{{ p2 }}</h5></div></div>
-            <div class="col-6 col-md-3"><div class="card bg-black border-warning p-2 text-center"><small class="text-secondary">P3 (3000+)</small><h5 class="text-warning mb-0">{{ p3 }}</h5></div></div>
-        </div>
+            <!-- Графики -->
+            <h4 class="text-warning"><i class="bi bi-pentagon"></i> Радар PSI</h4>
+            <div class="card bg-black border-warning p-3 mb-4">
+                <canvas id="radarChart" style="max-height: 350px;"></canvas>
+            </div>
 
-        <!-- Модули PSI -->
-        <h4 class="text-warning"><i class="bi bi-list-ul"></i> Модули PSI</h4>
-        {% set modules = [
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <h6 class="text-warning"><i class="bi bi-pie-chart"></i> Бравлеры по тирам</h6>
+                    <div class="card bg-black border-warning p-3">
+                        <canvas id="tierChart" style="max-height: 250px;"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-warning"><i class="bi bi-bar-chart"></i> Топ-10 бравлеров</h6>
+                    <div class="card bg-black border-warning p-3">
+                        <canvas id="topBrawlersChart" style="max-height: 250px;"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scatter график -->
+            <h6 class="text-warning"><i class="bi bi-scatter-chart"></i> Трофеи vs Сила (все бравлеры)</h6>
+            <div class="card bg-black border-warning p-3 mb-4">
+                <canvas id="scatterChart" style="max-height: 300px;"></canvas>
+            </div>
+
+            <!-- Линейный график изменения трофеев -->
+            {% if battlelog and battlelog.get("items") %}
+            <h6 class="text-warning"><i class="bi bi-graph-up"></i> Изменение трофеев (battlelog)</h6>
+            <div class="card bg-black border-warning p-3 mb-4">
+                <canvas id="battlelogChart" style="max-height: 250px;"></canvas>
+            </div>
+            {% endif %}
+
+            <!-- Сводка -->
+            {% set total_brawlers = player.brawlers|length %}
+            {% set p1 = player.brawlers|selectattr('trophies', 'ge', 1000)|list|length %}
+            {% set p2 = player.brawlers|selectattr('trophies', 'ge', 2000)|list|length %}
+            {% set p3 = player.brawlers|selectattr('trophies', 'ge', 3000)|list|length %}
+            <h5 class="text-warning"><i class="bi bi-info-circle"></i> Сводка</h5>
+            <div class="row g-2 mb-4">
+                <div class="col-6 col-md-3">
+                    <div class="card bg-black border-warning p-2 text-center"><small
+                            class="text-secondary">Бравлеров</small><h5 class="text-warning mb-0">{{ total_brawlers
+                        }}</h5></div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="card bg-black border-warning p-2 text-center"><small class="text-secondary">P1
+                        (1000+)</small><h5 class="text-warning mb-0">{{ p1 }}</h5></div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="card bg-black border-warning p-2 text-center"><small class="text-secondary">P2
+                        (2000+)</small><h5 class="text-warning mb-0">{{ p2 }}</h5></div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="card bg-black border-warning p-2 text-center"><small class="text-secondary">P3
+                        (3000+)</small><h5 class="text-warning mb-0">{{ p3 }}</h5></div>
+                </div>
+            </div>
+
+            <!-- Модули PSI -->
+            <h4 class="text-warning"><i class="bi bi-list-ul"></i> Модули PSI</h4>
+            {% set modules = [
             ("1_praims", "Праймы", 30), ("2_ranked", "Ranked", 37), ("3_top_world", "Топ-мир", 20),
-            ("4_veteran", "Ветеран", 8), ("5_quantitative", "Колич.", 15), ("6_qualitative", "Качеств.", 10), ("7_club", "Клуб", 0.5)
-        ] %}
-        {% for key, name, max_val in modules %}
-        {% set score = psi.modules[key].score %}
-        {% set pct = (score / max_val * 100)|int %}
-        <div class="card bg-black border-warning mb-2">
-            <div class="card-header bg-dark text-warning fw-bold" data-bs-toggle="collapse" data-bs-target="#mod{{ key }}" style="cursor: pointer;">
-                <div class="d-flex justify-content-between">
-                    <span>{{ name }}</span>
-                    <span>{{ score }}/{{ max_val }}</span>
+            ("4_veteran", "Ветеран", 8), ("5_quantitative", "Колич.", 15), ("6_qualitative", "Качеств.", 10), ("7_club",
+            "Клуб", 0.5)
+            ] %}
+            {% for key, name, max_val in modules %}
+            {% set score = psi.modules[key].score %}
+            {% set pct = (score / max_val * 100)|int %}
+            <div class="card bg-black border-warning mb-2">
+                <div class="card-header bg-dark text-warning fw-bold" data-bs-toggle="collapse"
+                     data-bs-target="#mod{{ key }}" style="cursor: pointer;">
+                    <div class="d-flex justify-content-between">
+                        <span>{{ name }}</span>
+                        <span>{{ score }}/{{ max_val }}</span>
+                    </div>
+                    <div class="progress mt-1" style="height: 6px;">
+                        <div class="progress-bar bg-warning" style="width: {{ pct }}%"></div>
+                    </div>
                 </div>
-                <div class="progress mt-1" style="height: 6px;">
-                    <div class="progress-bar bg-warning" style="width: {{ pct }}%"></div>
+                <div class="collapse show" id="mod{{ key }}">
+                    <div class="card-body text-light small">
+                        {% for line in psi.modules[key].detail %}
+                        <p class="mb-1">{{ line }}</p>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
-            <div class="collapse show" id="mod{{ key }}">
-                <div class="card-body text-light small">
-                    {% for line in psi.modules[key].detail %}
-                    <p class="mb-1">{{ line }}</p>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-        {% endfor %}
+            {% endfor %}
 
-        <!-- История боёв -->
-        {% if battlelog and battlelog.get("items") %}
-        <h4 class="text-warning mt-4"><i class="bi bi-clock-history"></i> Последние бои</h4>
-        <div class="card bg-black border-warning">
-            <div class="table-responsive">
-                <table class="table table-dark table-sm mb-0">
-                    <thead><tr class="text-warning"><th>Режим</th><th>Карта</th><th>Результат</th><th>🏆</th></tr></thead>
-                    <tbody>
+            <!-- Полный список бравлеров -->
+            <h4 class="text-warning mt-4"><i class="bi bi-person-badge"></i> Все бравлеры ({{ total_brawlers }})</h4>
+            <div class="card bg-black border-warning">
+                <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                    <table class="table table-dark table-sm mb-0">
+                        <thead>
+                        <tr class="text-warning">
+                            <th>Бравлер</th>
+                            <th>🏆</th>
+                            <th>Сила</th>
+                            <th>Ранг</th>
+                            <th>Скин</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for b in (player.brawlers | sort(attribute='trophies', reverse=True)) %}
+                        <tr>
+                            <td>{{ b.name }}</td>
+                            <td>{{ b.trophies }}</td>
+                            <td>{{ b.power }}</td>
+                            <td>{{ b.rank }}</td>
+                            <td class="text-secondary">{{ b.skin.name if b.skin and b.skin.name != b.name else '—' }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- История боёв -->
+            {% if battlelog and battlelog.get("items") %}
+            <h4 class="text-warning mt-4"><i class="bi bi-clock-history"></i> Последние бои</h4>
+            <div class="card bg-black border-warning">
+                <div class="table-responsive">
+                    <table class="table table-dark table-sm mb-0">
+                        <thead>
+                        <tr class="text-warning">
+                            <th>Режим</th>
+                            <th>Карта</th>
+                            <th>Рез.</th>
+                            <th>🏆</th>
+                        </tr>
+                        </thead>
+                        <tbody>
                         {% for b in battlelog.get("items", [])[:10] %}
                         <tr>
                             <td>{{ b.get("event", {}).get("mode", "?") }}</td>
                             <td class="text-secondary">{{ b.get("event", {}).get("map", "?") }}</td>
-                            <td>
-                                {% set result = b.get("battle", {}).get("result", "") %}
-                                {% if result == 'victory' %}✅{% elif result == 'defeat' %}❌{% else %}🤝{% endif %}
+                            <td>{% set r = b.get("battle", {}).get("result", "") %}{% if r == 'victory' %}✅{% elif r ==
+                                'defeat' %}❌{% else %}🤝{% endif %}
                             </td>
                             <td>{{ b.get("battle", {}).get("trophyChange", 0) }}</td>
                         </tr>
                         {% endfor %}
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-        {% endif %}
+            {% endif %}
 
-        <!-- Время обновления -->
-        <p class="text-secondary text-end mt-3"><small>🕐 Обновлено: <span id="updateTime">сейчас</span></small></p>
+            <p class="text-secondary text-end mt-3"><small>🕐 Обновлено: <span id="updateTime">сейчас</span></small></p>
+        </div>
     </div>
-</div>
 </div>
 {% endblock %}
 
 {% block extra_scripts %}
 <script>
-    // Обновление времени
     document.getElementById('updateTime').textContent = new Date().toLocaleTimeString('ru-RU');
+    {% if psi.psi < 100 %}setTimeout(() => location.reload(), 60000);{% endif %}
 
-    // Автообновление каждые 60 секунд
-    {% if psi.psi < 100 %}
-    setTimeout(() => location.reload(), 60000);
-    {% endif %}
-
-    // 🔉 Звук при PSI >= 80
     {% if psi.psi >= 80 %}
-    try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain); gain.connect(ctx.destination);
-        osc.frequency.value = {{ 440 + (psi.psi - 80) * 10 }};
-        osc.type = 'triangle'; gain.gain.value = 0.3;
-        osc.start();
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.8);
-        osc.stop(ctx.currentTime + 0.8);
-    } catch(e) {}
+    try{const c=new (window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value={{ 440 + (psi.psi - 80) * 10 }};o.type='triangle';g.gain.value=0.3;o.start();g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.8);o.stop(c.currentTime+0.8)}catch(e){}
     {% endif %}
 
-    // 🎉 Конфетти при GODLIKE
     {% if psi.psi >= 100 %}
-    const colors = ['#ffc107','#ff4444','#00c853','#ff8800','#2979ff','#aa00ff','#ff8afb'];
-    for (let i = 0; i < 80; i++) {
-        setTimeout(() => {
-            const c = document.createElement('div');
-            c.style.cssText = `position:fixed;top:-30px;left:${Math.random()*100}vw;width:${Math.random()*10+6}px;height:${Math.random()*10+6}px;background:${colors[Math.floor(Math.random()*colors.length)]};z-index:9999;pointer-events:none;border-radius:${Math.random()>0.5?'50%':'0'};animation:cf${i} ${Math.random()*2+2}s linear forwards;`;
-            const ks = `@keyframes cf${i}{to{transform:translateY(105vh) rotate(${Math.random()*720}deg);opacity:0;}}`;
-            document.head.appendChild(document.createElement('style')).textContent = ks;
-            document.body.appendChild(c);
-            setTimeout(() => c.remove(), 4000);
-        }, i * 30);
-    }
+    const cl=['#ffc107','#ff4444','#00c853','#ff8800','#2979ff','#aa00ff','#ff8afb'];
+    for(let i=0;i<80;i++){setTimeout(()=>{const d=document.createElement('div');d.style.cssText=`position:fixed;top:-30px;left:${Math.random()*100}vw;width:${Math.random()*10+6}px;height:${Math.random()*10+6}px;background:${cl[Math.floor(Math.random()*cl.length)]};z-index:9999;pointer-events:none;border-radius:${Math.random()>0.5?'50%':'0'};animation:cf${i} ${Math.random()*2+2}s linear forwards;`;document.head.appendChild(document.createElement('style')).textContent=`@keyframes cf${i}{to{transform:translateY(105vh) rotate(${Math.random()*720}deg);opacity:0;}}`;document.body.appendChild(d);setTimeout(()=>d.remove(),4000)},i*30)}
     {% endif %}
 
-    // Настройка цветов Chart.js
-    Chart.defaults.color = '#8b949e';
-    Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
+    Chart.defaults.color='#8b949e';Chart.defaults.borderColor='rgba(255,255,255,0.1)';
 
-    // Радар PSI
-    new Chart(document.getElementById('radarChart'), {
-        type: 'radar',
-        data: {
-            labels: ['Праймы', 'Ranked', 'Топ-мир', 'Ветеран', 'Колич.', 'Качеств.', 'Клуб'],
-            datasets: [{
-                label: '{{ player.name }}',
-                data: [{{ psi.modules["1_praims"].score }}, {{ psi.modules["2_ranked"].score }}, {{ psi.modules["3_top_world"].score }}, {{ psi.modules["4_veteran"].score }}, {{ psi.modules["5_quantitative"].score }}, {{ psi.modules["6_qualitative"].score }}, {{ psi.modules["7_club"].score }}],
-                backgroundColor: 'rgba(255,193,7,0.25)', borderColor: '#ffc107', borderWidth: 2,
-                pointBackgroundColor: '#ffc107', pointBorderColor: '#000'
-            }, {
-                label: 'Максимум',
-                data: [30, 37, 20, 8, 15, 10, 0.5],
-                backgroundColor: 'rgba(139,148,158,0.05)', borderColor: '#8b949e', borderWidth: 1,
-                borderDash: [5, 5], pointRadius: 0
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: { r: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' }, pointLabels: { color: '#8b949e', font: { size: 11 } }, ticks: { display: false }, suggestedMax: 37 } },
-            plugins: { legend: { labels: { color: '#8b949e', usePointStyle: true } } }
-        }
-    });
+    // Радар
+    new Chart(document.getElementById('radarChart'),{type:'radar',data:{labels:['Праймы','Ranked','Топ-мир','Ветеран','Колич.','Качеств.','Клуб'],datasets:[{label:'{{ player.name }}',data:[{{ psi.modules["1_praims"].score }},{{ psi.modules["2_ranked"].score }},{{ psi.modules["3_top_world"].score }},{{ psi.modules["4_veteran"].score }},{{ psi.modules["5_quantitative"].score }},{{ psi.modules["6_qualitative"].score }},{{ psi.modules["7_club"].score }}],backgroundColor:'rgba(255,193,7,0.25)',borderColor:'#ffc107',borderWidth:2,pointBackgroundColor:'#ffc107',pointBorderColor:'#000'},{label:'Максимум',data:[30,37,20,8,15,10,0.5],backgroundColor:'rgba(139,148,158,0.05)',borderColor:'#8b949e',borderWidth:1,borderDash:[5,5],pointRadius:0}]},options:{responsive:true,scales:{r:{beginAtZero:true,grid:{color:'rgba(255,255,255,0.1)'},pointLabels:{color:'#8b949e',font:{size:11}},ticks:{display:false},suggestedMax:37}},plugins:{legend:{labels:{color:'#8b949e',usePointStyle:true}}}}});
 
     // Донат тиров
-    {% set tier_data = namespace(s=0, a=0, b=0, c=0, d=0, f=0) %}
-    {% for line in psi.modules["1_praims"].detail %}
-        {% if line.startswith("  S:") %}
-            {% set parts = line.replace("  S: ", "").split(" | ") %}
-            {% set tier_data.s = parts[0]|int %}{% set tier_data.a = parts[1].replace("A: ", "")|int %}
-            {% set tier_data.b = parts[2].replace("B: ", "")|int %}{% set tier_data.c = parts[3].replace("C: ", "")|int %}
-            {% set tier_data.d = parts[4].replace("D: ", "")|int %}{% set tier_data.f = parts[5].replace("F: ", "")|int %}
-        {% endif %}
-    {% endfor %}
-    new Chart(document.getElementById('tierChart'), {
-        type: 'doughnut',
-        data: {
-            labels: ['S', 'A', 'B', 'C', 'D', 'F'],
-            datasets: [{
-                data: [{{ tier_data.s }}, {{ tier_data.a }}, {{ tier_data.b }}, {{ tier_data.c }}, {{ tier_data.d }}, {{ tier_data.f }}],
-                backgroundColor: ['#ff4444','#ff8800','#ffc107','#00c853','#2979ff','#aa00ff'],
-                borderColor: '#0d1117', borderWidth: 2
-            }]
-        },
-        options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: '#8b949e', padding: 10, usePointStyle: true } } } }
-    });
+    {% set td=namespace(s=0,a=0,b=0,c=0,d=0,f=0) %}{% for line in psi.modules["1_praims"].detail %}{% if line.startswith("  S:") %}{% set p=line.replace("  S: ","").split(" | ") %}{% set td.s=p[0]|int %}{% set td.a=p[1].replace("A: ","")|int %}{% set td.b=p[2].replace("B: ","")|int %}{% set td.c=p[3].replace("C: ","")|int %}{% set td.d=p[4].replace("D: ","")|int %}{% set td.f=p[5].replace("F: ","")|int %}{% endif %}{% endfor %}
+    new Chart(document.getElementById('tierChart'),{type:'doughnut',data:{labels:['S','A','B','C','D','F'],datasets:[{data:[{{ td.s }},{{ td.a }},{{ td.b }},{{ td.c }},{{ td.d }},{{ td.f }}],backgroundColor:['#ff4444','#ff8800','#ffc107','#00c853','#2979ff','#aa00ff'],borderColor:'#0d1117',borderWidth:2}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{color:'#8b949e',padding:10,usePointStyle:true}}}}});
 
     // Топ-10 бравлеров
-    {% set top10 = (player.brawlers | sort(attribute='trophies', reverse=True))[:10] %}
-    new Chart(document.getElementById('topBrawlersChart'), {
-        type: 'bar',
-        data: {
-            labels: [{% for b in top10 %}'{{ b.name }}',{% endfor %}],
-            datasets: [{
-                label: 'Трофеи', data: [{% for b in top10 %}{{ b.trophies }},{% endfor %}],
-                backgroundColor: 'rgba(255,193,7,0.5)', borderColor: '#ffc107', borderWidth: 1, borderRadius: 4
-            }]
-        },
-        options: {
-            responsive: true, indexAxis: 'y',
-            scales: { x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#8b949e' } }, y: { grid: { display: false }, ticks: { color: '#8b949e', font: { size: 10 } } } },
-            plugins: { legend: { display: false } }
-        }
-    });
+    {% set top10=(player.brawlers|sort(attribute='trophies',reverse=True))[:10] %}
+    new Chart(document.getElementById('topBrawlersChart'),{type:'bar',data:{labels:[{% for b in top10 %}'{{ b.name }}',{% endfor %}],datasets:[{label:'Трофеи',data:[{% for b in top10 %}{{ b.trophies }},{% endfor %}],backgroundColor:'rgba(255,193,7,0.5)',borderColor:'#ffc107',borderWidth:1,borderRadius:4}]},options:{responsive:true,indexAxis:'y',scales:{x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8b949e'}},y:{grid:{display:false},ticks:{color:'#8b949e',font:{size:10}}}},plugins:{legend:{display:false}}}});
+
+    // Scatter: трофеи vs сила
+    new Chart(document.getElementById('scatterChart'),{type:'scatter',data:{datasets:[{label:'Бравлеры',data:[{% for b in player.brawlers %}{x:{{ b.power }},y:{{ b.trophies }}},{% endfor %}],backgroundColor:'rgba(255,193,7,0.6)',borderColor:'#ffc107',pointRadius:5}]},options:{responsive:true,scales:{x:{title:{display:true,text:'Сила',color:'#8b949e'},ticks:{color:'#8b949e'},grid:{color:'rgba(255,255,255,0.05)'}},y:{title:{display:true,text:'Трофеи',color:'#8b949e'},ticks:{color:'#8b949e'},grid:{color:'rgba(255,255,255,0.05)'}}},plugins:{legend:{display:false}}}});
+
+    // Линейный график battlelog
+    {% if battlelog and battlelog.get("items") %}
+    {% set bl_items = battlelog.get("items", []) %}
+    new Chart(document.getElementById('battlelogChart'),{type:'line',data:{labels:[{% for i in range(bl_items|length) %}{{ bl_items|length - i }},{% endfor %}],datasets:[{label:'Изменение трофеев',data:[{% for b in bl_items %}{{ b.get("battle",{}).get("trophyChange",0) }},{% endfor %}],borderColor:'#ffc107',backgroundColor:'rgba(255,193,7,0.1)',borderWidth:2,fill:true,tension:0.3,pointBackgroundColor:'#ffc107'}]},options:{responsive:true,scales:{x:{ticks:{color:'#8b949e'},grid:{display:false}},y:{ticks:{color:'#8b949e'},grid:{color:'rgba(255,255,255,0.05)'}}},plugins:{legend:{labels:{color:'#8b949e'}}}}});
+    {% endif %}
 </script>
 {% endblock %}

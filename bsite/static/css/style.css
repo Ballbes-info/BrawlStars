@@ -49,6 +49,11 @@ body {
     color: #000;
 }
 
+.btn-outline-warning.active {
+    background: #ffc107;
+    color: #000;
+}
+
 .card {
     border: 1px solid var(--border-color);
     background: var(--bg-card);
@@ -82,7 +87,6 @@ body {
 }
 
 .progress-bar {
-    background: linear-gradient(90deg, #ffc107, #e0a800);
     transition: width 1s ease;
 }
 
@@ -128,11 +132,48 @@ tr:hover {
     background: rgba(255, 193, 7, 0.08) !important;
 }
 
+canvas {
+    max-width: 100%;
+}
+
+/* Стили для светлой темы */
+[data-bs-theme="light"] .card {
+    background: #fff;
+    color: #1a1a2e;
+}
+
+[data-bs-theme="light"] .text-light {
+    color: #1a1a2e !important;
+}
+
+[data-bs-theme="light"] .text-secondary {
+    color: #586069 !important;
+}
+
+[data-bs-theme="light"] .bg-black {
+    background: #fff !important;
+}
+
+[data-bs-theme="light"] .bg-dark {
+    background: #f6f8fa !important;
+}
+
+[data-bs-theme="light"] .table-dark {
+    --bs-table-bg: #fff;
+    --bs-table-hover-bg: rgba(255, 193, 7, 0.05);
+    color: #1a1a2e;
+}
+
+[data-bs-theme="light"] .navbar-dark {
+    background: #1a1a2e !important;
+}
+
+[data-bs-theme="light"] input.form-control {
+    color: #1a1a2e !important;
+    background: #fff !important;
+}
+
 @media (max-width: 768px) {
     .display-1 { font-size: 3rem; }
     .sticky-top { position: relative !important; top: 0 !important; }
-}
-
-canvas {
-    max-width: 100%;
 }

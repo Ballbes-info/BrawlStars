@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{% block title %}Конвертер тегов{% endblock %}
+{% block title %}{{ lang.converter }}{% endblock %}
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-lg-6">
-        <h3 class="text-warning mb-3"><i class="bi bi-arrow-repeat"></i> Конвертер тегов</h3>
+    <div class="col-lg-8">
+        <h3 class="text-warning mb-3"><i class="bi bi-arrow-repeat"></i> {{ lang.converter }}</h3>
 
         {% if error %}
         <div class="alert alert-danger">{{ error }}</div>

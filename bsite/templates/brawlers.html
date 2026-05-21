@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{% block title %}Все бравлеры{% endblock %}
+{% block title %}{{ lang.brawlers }}{% endblock %}
 {% block content %}
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h3 class="text-warning"><i class="bi bi-person-badge"></i> Все бравлеры</h3>
+    <h3 class="text-warning"><i class="bi bi-person-badge"></i> {{ lang.brawlers }}</h3>
     <span class="text-secondary">{{ brawlers|length }} бравлеров</span>
 </div>
 
@@ -27,12 +27,11 @@
 <!-- Карточки бравлеров -->
 <div class="row g-3" id="brawlersGrid">
     {% for name, data in brawlers.items() %}
-    <div class="col-6 col-md-4 col-lg-3 brawler-card" data-tier="{{ data.tier }}" data-name="{{ name|lower }}">
+    <div class="col-6 col-md-4 col-lg-3 col-xl-2 brawler-card" data-tier="{{ data.tier }}" data-name="{{ name|lower }}">
         <div class="card bg-black border-warning h-100">
             <div class="card-body text-center p-3">
-                <span class="badge bg-{{ {'S': 'danger', 'A': 'warning', 'B': 'warning', 'C': 'success', 'D': 'primary', 'F': 'secondary'}[data.tier] }} mb-2">
-                    {{ data.tier }}-Tier
-                </span>
+                {% set tier_colors = {'S': 'danger', 'A': 'warning', 'B': 'warning', 'C': 'success', 'D': 'primary', 'F': 'secondary'} %}
+                <span class="badge bg-{{ tier_colors.get(data.tier, 'warning') }} mb-2">{{ data.tier }}-Tier</span>
                 <h6 class="text-warning mb-1">{{ name }}</h6>
                 <small class="text-secondary">{{ data.class }}</small>
             </div>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" data-bs-theme="dark">
+<html lang="{{ lang.get('code', 'ru') }}" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,12 +23,15 @@
             </button>
             <div class="collapse navbar-collapse" id="nav">
                 <div class="navbar-nav ms-auto">
-                    <a class="nav-link" href="/"><i class="bi bi-search"></i> Поиск</a>
-                    <a class="nav-link" href="/compare"><i class="bi bi-arrow-left-right"></i> Сравнение</a>
-                    <a class="nav-link" href="/rankings"><i class="bi bi-trophy"></i> Рейтинги</a>
-                    <a class="nav-link" href="/brawlers"><i class="bi bi-person-badge"></i> Бравлеры</a>
-                    <a class="nav-link" href="/tag-converter"><i class="bi bi-arrow-repeat"></i> Конвертер</a>
-                    <a class="nav-link" href="/random"><i class="bi bi-shuffle"></i> Случайный</a>
+                    <a class="nav-link" href="/"><i class="bi bi-search"></i> {{ lang.search }}</a>
+                    <a class="nav-link" href="/compare"><i class="bi bi-arrow-left-right"></i> {{ lang.compare }}</a>
+                    <a class="nav-link" href="/rankings"><i class="bi bi-trophy"></i> {{ lang.rankings }}</a>
+                    <a class="nav-link" href="/brawlers"><i class="bi bi-person-badge"></i> {{ lang.brawlers }}</a>
+                    <a class="nav-link" href="/tag-converter"><i class="bi bi-arrow-repeat"></i> {{ lang.converter }}</a>
+                    <a class="nav-link" href="/random"><i class="bi bi-shuffle"></i> {{ lang.random }}</a>
+                    <a class="nav-link" href="/mini-game"><i class="bi bi-controller"></i> Мини-игра</a>
+                    <a class="nav-link" href="/set-lang/ru">🇷🇺</a>
+                    <a class="nav-link" href="/set-lang/en">🇬🇧</a>
                     <a class="nav-link" href="#" onclick="toggleTheme()"><i class="bi bi-sun-fill" id="themeIcon"></i></a>
                 </div>
             </div>
@@ -40,7 +43,7 @@
     </main>
 
     <footer class="text-center text-secondary py-3 border-top border-warning mt-4">
-        <small>Brawl Stars Stats v2.1 — Player Skill Index &copy; 2026</small>
+        <small>Brawl Stars Stats v2.2 — Player Skill Index &copy; 2026</small>
     </footer>
 
     {% block extra_scripts %}{% endblock %}

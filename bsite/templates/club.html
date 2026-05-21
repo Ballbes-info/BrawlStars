@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Клуб {{ club.name }}{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card bg-black border-warning p-4 mb-4">
+            <h3 class="text-warning">{{ club.name }}</h3>
+            <p class="text-secondary">{{ club.tag }}</p>
+            <p class="text-light">{{ club.description or '—' }}</p>
+            <hr class="text-warning">
+            <p><i class="bi bi-trophy text-warning"></i> Трофеи: <strong>{{ club.trophies }}</strong></p>
+            <p><i class="bi bi-people text-warning"></i> Участников: <strong>{{ club.memberCount or members|length }}</strong></p>
+            <p><i class="bi bi-flag text-warning"></i> Требования: <strong>{{ club.requiredTrophies }} трофеев</strong></p>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <h4 class="text-warning"><i class="bi bi-people-fill"></i> Участники ({{ members|length }})</h4>
+        <div class="table-responsive">
+            <table class="table table-dark table-hover">
+                <thead><tr class="text-warning"><th>Игрок</th><th>Роль</th><th>🏆</th><th>PSI</th></tr></thead>
+                <tbody>
+                    {% for m in members %}
+                    <tr>
+                        <td><a href="/player/{{ m.tag.replace('#', '%23') }}" class="text-warning text-decoration-none">{{ m.name }}</a></td>
+                        <td class="text-secondary">
+                            {% if m.role == 'president' %}👑
+                            {% elif m.role == 'vicePresident' %}🛡️
+                            {% else %}👤{% endif %}
+                            {{ m.role }}
+                        </td>
+                        <td>{{ m.trophies }}</td>
+                        <td>
+                            <a href="/player/{{ m.tag.replace('#', '%23') }}" class="btn btn-outline-warning btn-sm">Рассчитать PSI</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

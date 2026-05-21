@@ -1,6 +1,7 @@
 {
-  "name": "Brawl Stats",
+  "name": "Brawl Stars Stats",
   "short_name": "BrawlStats",
+  "description": "Player Skill Index — система оценки скилла игроков Brawl Stars",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0d1117",
@@ -9,7 +10,10 @@
     {
       "src": "https://cdn-icons-png.flaticon.com/512/3110/3110004.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
-  ]
+  ],
+  "lang": "ru",
+  "orientation": "any"
 }
